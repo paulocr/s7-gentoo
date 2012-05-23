@@ -1,0 +1,273 @@
+#! /bin/sh
+# fastboot erase system
+restart () {
+	chmod 755 bin/*
+	echo "****************** Development Tools for Huawei Ideos S7 ******** ver 2.0 *"
+	echo "                                                      © by HellFaust 2011  "
+	echo "********************************** UNPACK *********************************"
+	echo "  0    Unpack UPDATA.APP only"
+	echo "  1    Unpack UPDATA.APP fully"
+	echo "  2    Unpack boot.img"
+	echo "  3    Unpack recovery.img"
+	echo "  4    Unpack system.img"
+	echo "  5    Unpack userdata.img"
+	echo "  6    Copying *.img from updata folder"
+	echo "********************************* CONVERT *********************************"
+	echo "  7    Convert splash.png to splash.raw565"
+	echo "  8    Convert splash.raw565 to splash.png"
+	echo "  9    Convert initlogo.png to initlogo.rle"
+	echo "  10   Convert initlogo.rle to initlogo.png"
+	echo "********************************** REPACK *********************************"
+	echo "  11   Repack boot.img"
+	echo "  12   Repack recovery.img"
+	echo "  13   Repack system.img"
+	echo "  14   Repack userdata.img"
+	echo "********************************** ERASE **********************************"
+	echo "  15   Erase boot partition"
+	echo "  16   Erase recovery partition"
+	echo "  17   Erase system partition"
+	echo "  18   Erase userdata partition"
+	echo "  19   Erase cache partition"
+	echo "********************************** FLASH **********************************"
+	echo "  20   Flash boot.img"
+	echo "  21   Flash recovery.img"
+	echo "  22   Flash system.img"
+	echo "  23   Flash userdata.img"
+	echo "  24   Flash splash.raw565"
+	echo "********************************** OTHER **********************************"
+	echo "  99    Quit"
+	echo "***************************************************************************"
+	echo
+	printf "%s" "Please make your decision: "
+	read ANSWER
+
+	case "$ANSWER" in
+		 0)   unpack_updata_only ;;
+		 1)   unpack_updata_fully ;;
+		 2)   unpack_boot ;;
+		 3)   unpack_recovery ;;
+		 4)   unpack_system ;;
+		 5)   unpack_userdata ;;
+		 6)   copying_img ;;
+		 7)   png2raw565 ;;
+		 8)   raw5652png ;;
+		 9)   png2rle ;;
+		 10)   rle2png ;;
+		 11)   repack_boot ;;
+		 12)   repack_recovery ;;
+		 13)   repack_system ;;
+		 14)   repack_userdata ;;
+		 
+		 15)   erase_boot ;;
+		 16)   erase_recovery ;;
+		 17)   erase_system ;;
+		 18)   erase_userdata ;;
+		 19)   erase_cache ;;
+		 
+		 
+		 20)   flash_boot ;;
+		 21)   flash_recovery ;;
+		 22)   flash_system ;;
+		 23)   flash_userdata ;;
+		 24)   flash_splash ;;
+		 
+		 99)   quit ;;
+		 *) clear
+			echo "Unknown command: '$ANSWER'"
+			read -p "Press ENTER to continue" nothing
+			clear
+		;;
+			
+	esac
+}
+
+unpack_updata_only () {
+	clear
+	perl scripts/unpack_updata.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+unpack_updata_fully () {
+	clear
+	perl scripts/unpack_updata.pl
+	perl scripts/copying_img.pl
+	perl scripts/unpack_boot_recovery.pl boot.img 0
+	perl scripts/unpack_boot_recovery.pl recovery.img 1
+	perl scripts/unpack_system_userdata.pl system.img 0
+	perl scripts/unpack_system_userdata.pl userdata.img 1
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+unpack_boot () {
+	clear
+	perl scripts/unpack_boot_recovery.pl boot.img 0
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+unpack_recovery () {
+	clear
+	perl scripts/unpack_boot_recovery.pl recovery.img 1
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+unpack_system () {
+	clear
+	perl scripts/unpack_system_userdata.pl system.img 0
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+unpack_userdata () {
+	clear
+	perl scripts/unpack_system_userdata.pl userdata.img 1
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+copying_img () {
+	clear
+	perl scripts/copying_img.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+png2raw565 () {
+	clear
+	perl scripts/png2raw565.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+raw5652png () {
+	clear
+	perl scripts/raw5652png.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+png2rle () {
+	clear
+	perl scripts/png2rle.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+rle2png () {
+	clear
+	perl scripts/rle2png.pl
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+repack_boot () {
+	clear
+	perl scripts/repack_boot_recovery.pl zImage boot.img-ramdisk boot.img 0
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+repack_recovery () {
+	clear
+	perl scripts/repack_boot_recovery.pl zImage recovery.img-ramdisk recovery.img 1
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+repack_system () {
+	clear
+	perl scripts/repack_system_userdata.pl system
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+repack_userdata () {
+	clear
+	perl scripts/repack_system_userdata.pl userdata
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+erase_boot () {
+	clear
+	perl scripts/erase_partition.pl boot
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+erase_recovery () {
+	clear
+	perl scripts/erase_partition.pl recovery
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+erase_system () {
+	clear
+	perl scripts/erase_partition.pl system
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+erase_userdata () {
+	clear
+	perl scripts/erase_partition.pl userdata
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+erase_cache () {
+	clear
+	perl scripts/erase_partition.pl cache
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+flash_boot () {
+	clear
+	perl scripts/flash_partition.pl boot boot.img
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+flash_recovery () {
+	clear
+	perl scripts/flash_partition.pl recovery recovery.img
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+flash_system () {
+	clear
+	perl scripts/flash_partition.pl system system.img
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+flash_userdata () {
+	clear
+	perl scripts/flash_partition.pl userdata userdata.img
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+flash_splash () {
+	clear
+	perl scripts/flash_partition.pl splash splash.raw565
+	read -p "Press ENTER to continue" nothing
+	clear
+}
+
+quit () {
+	clear
+	exit 0
+}
+
+clear
+while [ "1" = "1" ] ;
+do
+	restart
+done
