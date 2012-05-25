@@ -1,0 +1,9 @@
+gentoo-s7 is a project to install gentoo linux OS on the tablet Huawei s7.
+The main objective of the project is to create a stable kernel version 3.4 is compatible with the aforementioned device.
+
+Description of directories:
+Android - directory containing the data necessary for sbokri Android
+drivers - a variety of specific driver for your device (currently only the msm / qsd)
+kernels contains the source code of the original kernel provided by Huawei, diff patches from the vanilla kernel with the same version, the kernel source 3.4 (development branch) in which 
+changes are made to be compatible with the device.
+The tools directory contains various tools for working with images of the portal
