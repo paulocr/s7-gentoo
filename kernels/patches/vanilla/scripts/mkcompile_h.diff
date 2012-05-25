@@ -1,0 +1,13 @@
+--- ./vanilla//scripts/mkcompile_h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//scripts/mkcompile_h	2012-05-23 10:44:05.894935139 +0300
+@@ -64,8 +64,8 @@
+   echo \#define UTS_VERSION \"`echo $UTS_VERSION | $UTS_TRUNCATE`\"
+ 
+   echo \#define LINUX_COMPILE_TIME \"`date +%T`\"
+-  echo \#define LINUX_COMPILE_BY \"`whoami`\"
+-  echo \#define LINUX_COMPILE_HOST \"`hostname | $UTS_TRUNCATE`\"
++  echo \#define LINUX_COMPILE_BY \"$CUST_USER\"
++  echo \#define LINUX_COMPILE_HOST \"$CUST_HOST\"
+ 
+   if [ -x /bin/dnsdomainname ]; then
+     domain=`dnsdomainname 2> /dev/null`

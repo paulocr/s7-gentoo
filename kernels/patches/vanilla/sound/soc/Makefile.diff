@@ -1,0 +1,7 @@
+--- ./vanilla//sound/soc/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//sound/soc/Makefile	2012-05-23 10:44:06.028935133 +0300
+@@ -14,3 +14,4 @@
+ obj-$(CONFIG_SND_SOC)	+= s6000/
+ obj-$(CONFIG_SND_SOC)	+= sh/
+ obj-$(CONFIG_SND_SOC)	+= txx9/
++obj-$(CONFIG_SND_SOC)   += msm/

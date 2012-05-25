@@ -1,0 +1,15 @@
+--- ./vanilla//drivers/char/tty_io.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/char/tty_io.c	2012-05-23 10:43:57.618935507 +0300
+@@ -2429,8 +2429,10 @@
+ 		clear = ~val;
+ 		break;
+ 	}
+-	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
+-	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
++	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
++		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
++	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
++		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
+ 	return tty->ops->tiocmset(tty, file, set, clear);
+ }
+ 

@@ -1,0 +1,21 @@
+--- ./vanilla//Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//Makefile	2012-05-23 10:43:53.801935679 +0300
+@@ -526,6 +526,18 @@
+ KBUILD_CFLAGS	+= -O2
+ endif
+ 
++KBUILD_CFLAGS   += -DHUAWEI_KERNEL_VERSION=\"$(HUAWEI_KERNEL_VERSION)\"
++#/*TODO: APPSBOOT_VERSION should be set in bootloader */
++KBUILD_CFLAGS   += -DAPPSBOOT_VERSION=\"$(APPSBOOT_VERSION)\"
++
++ifeq ($(HUAWEI_PC_SUITE), yes)
++KBUILD_CFLAGS   += -DCONFIG_HUAWEI_PC_SUITE_ENABLE
++endif
++
++ifeq ($(HUAWEI_SUPPORT_EVDO), yes)
++KBUILD_CFLAGS   += -DCONFIG_HUAWEI_CDMA_EVDO
++endif
++
+ include $(srctree)/arch/$(SRCARCH)/Makefile
+ 
+ ifneq ($(CONFIG_FRAME_WARN),0)

@@ -1,0 +1,10 @@
+--- ./vanilla//fs/proc/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/proc/Makefile	2012-05-23 10:44:04.457935204 +0300
+@@ -19,6 +19,7 @@
+ proc-y	+= uptime.o
+ proc-y	+= version.o
+ proc-y	+= softirqs.o
++proc-y  += app_info.o
+ proc-$(CONFIG_PROC_SYSCTL)	+= proc_sysctl.o
+ proc-$(CONFIG_NET)		+= proc_net.o
+ proc-$(CONFIG_PROC_KCORE)	+= kcore.o

@@ -1,0 +1,31 @@
+--- ./vanilla//include/linux/lightsensor.h	1970-01-01 03:00:00.000000000 +0300
++++ ./default//include/linux/lightsensor.h	2012-05-23 10:44:04.583935199 +0300
+@@ -0,0 +1,28 @@
++/* include/linux/lightsensor.h
++ *
++ * Copyright (C) 2009 Google, Inc.
++ * Author: Iliyan Malchev <malchev@google.com>
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++#ifndef __LINUX_LIGHTSENSOR_H
++#define __LINUX_LIGHTSENSOR_H
++
++#include <linux/types.h>
++#include <linux/ioctl.h>
++
++#define LIGHTSENSOR_IOCTL_MAGIC 'l'
++
++#define LIGHTSENSOR_IOCTL_GET_ENABLED _IOR(LIGHTSENSOR_IOCTL_MAGIC, 1, int *)
++#define LIGHTSENSOR_IOCTL_ENABLE _IOW(LIGHTSENSOR_IOCTL_MAGIC, 2, int *)
++
++#endif

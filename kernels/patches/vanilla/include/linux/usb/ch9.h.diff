@@ -1,0 +1,10 @@
+--- ./vanilla//include/linux/usb/ch9.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/usb/ch9.h	2012-05-23 10:44:04.648935196 +0300
+@@ -616,6 +616,7 @@
+ } __attribute__ ((packed));
+ 
+ 
++#define USB_DT_INTERFACE_ASSOCIATION_SIZE  8
+ /*-------------------------------------------------------------------------*/
+ 
+ /* USB_DT_SECURITY:  group of wireless security descriptors, including

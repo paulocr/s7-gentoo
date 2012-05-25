@@ -1,0 +1,16 @@
+--- ./vanilla//kernel/cpuset.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/cpuset.c	2012-05-23 10:44:04.721935192 +0300
+@@ -1330,6 +1330,13 @@
+ 	int ret;
+ 	struct cpuset *cs = cgroup_cs(cont);
+ 
++	if ((current != task) && (!capable(CAP_SYS_ADMIN))) {
++		const struct cred *cred = current_cred(), *tcred;
++
++		if (cred->euid != tcred->uid && cred->euid != tcred->suid)
++			return -EPERM;
++	}
++ 
+ 	if (cpumask_empty(cs->cpus_allowed) || nodes_empty(cs->mems_allowed))
+ 		return -ENOSPC;
+ 

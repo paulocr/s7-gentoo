@@ -1,0 +1,13 @@
+--- ./vanilla//sound/soc/soc-jack.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//sound/soc/soc-jack.c	2012-05-23 10:44:06.057935133 +0300
+@@ -1,3 +1,5 @@
++#warning compile out
++#if 0
+ /*
+  * soc-jack.c  --  ALSA SoC jack handling
+  *
+@@ -277,3 +279,4 @@
+ }
+ EXPORT_SYMBOL_GPL(snd_soc_jack_free_gpios);
+ #endif	/* CONFIG_GPIOLIB */
++#endif

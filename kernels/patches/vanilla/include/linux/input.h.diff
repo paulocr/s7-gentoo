@@ -1,0 +1,113 @@
+--- ./vanilla//include/linux/input.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/input.h	2012-05-23 10:44:04.573935198 +0300
+@@ -98,6 +98,9 @@
+ #define EV_FF			0x15
+ #define EV_PWR			0x16
+ #define EV_FF_STATUS		0x17
++
++#define EV_GESTURE		0x18
++
+ #define EV_MAX			0x1f
+ #define EV_CNT			(EV_MAX+1)
+ 
+@@ -377,6 +380,8 @@
+ 
+ #define KEY_WIMAX		246
+ 
++#define KEY_NOTIFICATION 247
++
+ /* Range 248 - 255 is reserved for special needs of AT keyboard driver */
+ 
+ #define BTN_MISC		0x100
+@@ -597,13 +602,17 @@
+ 
+ /* We avoid low common keys in module aliases so they don't get huge. */
+ #define KEY_MIN_INTERESTING	KEY_MUTE
++
++/* REVISIT: keys for camera related functions */
++#define KEY_CAMERA_FOCUS	0x210
++#define KEY_CAMERA_SNAPSHOT	0x2fe
++
+ #define KEY_MAX			0x2ff
+ #define KEY_CNT			(KEY_MAX+1)
+ 
+ /*
+  * Relative axes
+  */
+-
+ #define REL_X			0x00
+ #define REL_Y			0x01
+ #define REL_Z			0x02
+@@ -614,6 +623,7 @@
+ #define REL_DIAL		0x07
+ #define REL_WHEEL		0x08
+ #define REL_MISC		0x09
++#define REL_LIGHT            0x0a   
+ #define REL_MAX			0x0f
+ #define REL_CNT			(REL_MAX+1)
+ 
+@@ -658,7 +668,6 @@
+ #define ABS_MT_TOOL_TYPE	0x37	/* Type of touching device */
+ #define ABS_MT_BLOB_ID		0x38	/* Group a set of packets as a blob */
+ #define ABS_MT_TRACKING_ID	0x39	/* Unique ID of initiated contact */
+-
+ #define ABS_MAX			0x3f
+ #define ABS_CNT			(ABS_MAX+1)
+ 
+@@ -770,6 +779,26 @@
+ #define FF_STATUS_PLAYING	0x01
+ #define FF_STATUS_MAX		0x01
+ 
++
++#define GESTURE_NO_GESTURE                          0x00
++#define GESTURE_SINGLE_TOUCH_PAN_UP                 0x01
++#define GESTURE_SINGLE_TOUCH_PAN_RIGHT         	    0x02
++#define GESTURE_SINGLE_TOUCH_PAN_DOWN          		0x03
++#define GESTURE_SINGLE_TOUCH_PAN_LEFT             	0x04
++#define GESTURE_SINGLE_TOUCH_ROTATE_CW         		0x05
++#define GESTURE_SINGLE_TOUCH_ROTATE_CCW       		0x06
++#define GESTURE_SINGLE_TOUCH_CLICK                  0x07
++#define GESTURE_MULTI_TOUCH_PAN_UP                  0x08
++#define GESTURE_MULTI_TOUCH_PAN_RIGHT           	0x09
++#define GESTURE_MULTI_TOUCH_PAN_DOWN           		0x0A
++#define GESTURE_MULTI_TOUCH_PAN_LEFT             	0x0B
++#define GESTURE_ZOOM_IN                             0x0C
++#define GESTURE_ZOOM_OUT                            0x0D
++#define GESTURE_SINGLE_TOUCH_DOUBLE_CLICK     		0x0E
++#define GESTURE_MULTI_TOUCH_CLICK     				0x0F
++#define GESTURE_MAX			0x1F
++#define GESTURE_CNT			(GESTURE_MAX+1)
++
+ /*
+  * Structures used in ioctls to upload effects to a device
+  * They are pieces of a bigger structure (called ff_effect)
+@@ -1085,6 +1114,8 @@
+ 	unsigned long ffbit[BITS_TO_LONGS(FF_CNT)];
+ 	unsigned long swbit[BITS_TO_LONGS(SW_CNT)];
+ 
++	unsigned long gesturebit[BITS_TO_LONGS(GESTURE_CNT)];
++	
+ 	unsigned int keycodemax;
+ 	unsigned int keycodesize;
+ 	void *keycode;
+@@ -1106,6 +1137,8 @@
+ 	unsigned long snd[BITS_TO_LONGS(SND_CNT)];
+ 	unsigned long sw[BITS_TO_LONGS(SW_CNT)];
+ 
++	unsigned long gesture [BITS_TO_LONGS(GESTURE_CNT)];
++	
+ 	int absmax[ABS_MAX + 1];
+ 	int absmin[ABS_MAX + 1];
+ 	int absfuzz[ABS_MAX + 1];
+@@ -1328,6 +1361,11 @@
+ 	input_event(dev, EV_SW, code, !!value);
+ }
+ 
++static inline void input_report_gesture(struct input_dev *dev, unsigned int code, int value)
++{
++	input_event(dev, EV_GESTURE, code, 0);
++}
++
+ static inline void input_sync(struct input_dev *dev)
+ {
+ 	input_event(dev, EV_SYN, SYN_REPORT, 0);

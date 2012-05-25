@@ -1,0 +1,18 @@
+--- ./vanilla//include/net/bluetooth/rfcomm.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/net/bluetooth/rfcomm.h	2012-05-23 10:44:04.665935195 +0300
+@@ -29,7 +29,6 @@
+ #define RFCOMM_CONN_TIMEOUT (HZ * 30)
+ #define RFCOMM_DISC_TIMEOUT (HZ * 20)
+ #define RFCOMM_AUTH_TIMEOUT (HZ * 25)
+-#define RFCOMM_IDLE_TIMEOUT (HZ * 2)
+ 
+ #define RFCOMM_DEFAULT_MTU	127
+ #define RFCOMM_DEFAULT_CREDITS	7
+@@ -155,7 +154,6 @@
+ struct rfcomm_session {
+ 	struct list_head list;
+ 	struct socket   *sock;
+-	struct timer_list timer;
+ 	unsigned long    state;
+ 	unsigned long    flags;
+ 	atomic_t         refcnt;

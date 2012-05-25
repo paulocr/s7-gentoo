@@ -1,0 +1,10 @@
+--- ./vanilla//drivers/input/mouse/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/mouse/Makefile	2012-05-23 10:43:57.801935501 +0300
+@@ -19,6 +19,7 @@
+ obj-$(CONFIG_MOUSE_SERIAL)		+= sermouse.o
+ obj-$(CONFIG_MOUSE_SYNAPTICS_I2C)	+= synaptics_i2c.o
+ obj-$(CONFIG_MOUSE_VSXXXAA)		+= vsxxxaa.o
++obj-$(CONFIG_MOUSE_OFN_HID)           += ofn_hid.o
+ 
+ psmouse-objs := psmouse-base.o synaptics.o
+ 

@@ -1,0 +1,43 @@
+--- ./vanilla//include/linux/mmc/sdio_func.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/mmc/sdio_func.h	2012-05-23 10:44:04.593935197 +0300
+@@ -15,12 +15,22 @@
+ #include <linux/device.h>
+ #include <linux/mod_devicetable.h>
+ 
++#include <linux/mmc/pm.h>
++
+ struct mmc_card;
+ struct sdio_func;
+ 
+ typedef void (sdio_irq_handler_t)(struct sdio_func *);
+ 
+ /*
++ * Structure used to hold embedded SDIO device data from platform layer
++ */
++struct sdio_embedded_func {
++	uint8_t f_class;
++	uint32_t f_maxblksize;
++};
++
++/*
+  * SDIO function CIS tuple (unknown to the core)
+  */
+ struct sdio_func_tuple {
+@@ -128,6 +138,8 @@
+ extern unsigned int sdio_align_size(struct sdio_func *func, unsigned int sz);
+ 
+ extern u8 sdio_readb(struct sdio_func *func, unsigned int addr, int *err_ret);
++extern u8 sdio_readb_ext(struct sdio_func *func, unsigned int addr, int *err_ret,
++	unsigned in);
+ extern u16 sdio_readw(struct sdio_func *func, unsigned int addr, int *err_ret);
+ extern u32 sdio_readl(struct sdio_func *func, unsigned int addr, int *err_ret);
+ 
+@@ -153,5 +165,8 @@
+ extern void sdio_f0_writeb(struct sdio_func *func, unsigned char b,
+ 	unsigned int addr, int *err_ret);
+ 
++extern mmc_pm_flag_t sdio_get_host_pm_caps(struct sdio_func *func);
++extern int sdio_set_host_pm_flags(struct sdio_func *func, mmc_pm_flag_t flags);
++
+ #endif
+ 

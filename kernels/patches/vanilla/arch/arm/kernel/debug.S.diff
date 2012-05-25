@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/kernel/debug.S	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/kernel/debug.S	2012-05-23 10:43:53.872935674 +0300
+@@ -22,7 +22,7 @@
+ #if defined(CONFIG_DEBUG_ICEDCC)
+ 		@@ debug using ARM EmbeddedICE DCC channel
+ 
+-#if defined(CONFIG_CPU_V6)
++#if defined(CONFIG_CPU_V6) || defined(CONFIG_CPU_V7)
+ 
+ 		.macro	addruart, rx
+ 		.endm

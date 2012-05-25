@@ -1,0 +1,25 @@
+--- ./vanilla//fs/fat/dir.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/fat/dir.c	2012-05-23 10:44:04.348935207 +0300
+@@ -758,6 +758,13 @@
+ 	return ret;
+ }
+ 
++static int fat_ioctl_volume_id(struct inode *dir)
++{
++	struct super_block *sb = dir->i_sb;
++	struct msdos_sb_info *sbi = MSDOS_SB(sb);
++	return sbi->vol_id;
++}
++
+ static int fat_dir_ioctl(struct inode *inode, struct file *filp,
+ 			 unsigned int cmd, unsigned long arg)
+ {
+@@ -773,6 +780,8 @@
+ 		short_only = 0;
+ 		both = 1;
+ 		break;
++	case VFAT_IOCTL_GET_VOLUME_ID:
++		return fat_ioctl_volume_id(inode);
+ 	default:
+ 		return fat_generic_ioctl(inode, filp, cmd, arg);
+ 	}

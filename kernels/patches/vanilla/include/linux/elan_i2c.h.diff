@@ -1,0 +1,20 @@
+--- ./vanilla//include/linux/elan_i2c.h	1970-01-01 03:00:00.000000000 +0300
++++ ./default//include/linux/elan_i2c.h	2012-05-23 10:44:04.557935200 +0300
+@@ -0,0 +1,17 @@
++#ifndef ELAN_I2C_H
++#define ELAN_I2C_H
++
++#define ELAN_8232_I2C_NAME "elan-touch"
++
++struct elan_i2c_platform_data {
++	uint16_t version;
++	int abs_x_min;
++	int abs_x_max;
++	int abs_y_min;
++	int abs_y_max;
++	int intr_gpio;
++	int (*power)(int on);
++};
++
++#endif
++

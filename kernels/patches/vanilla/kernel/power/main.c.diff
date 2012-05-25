@@ -1,0 +1,53 @@
+--- ./vanilla//kernel/power/main.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/power/main.c	2012-05-23 10:44:04.731935192 +0300
+@@ -147,7 +147,11 @@
+ 			   const char *buf, size_t n)
+ {
+ #ifdef CONFIG_SUSPEND
++#ifdef CONFIG_EARLYSUSPEND
++	suspend_state_t state = PM_SUSPEND_ON;
++#else
+ 	suspend_state_t state = PM_SUSPEND_STANDBY;
++#endif
+ 	const char * const *s;
+ #endif
+ 	char *p;
+@@ -169,8 +173,15 @@
+ 			break;
+ 	}
+ 	if (state < PM_SUSPEND_MAX && *s)
++#ifdef CONFIG_EARLYSUSPEND
++		if (state == PM_SUSPEND_ON || valid_state(state)) {
++			error = 0;
++			request_suspend_state(state);
++		}
++#else
+ 		error = enter_state(state);
+ #endif
++#endif
+ 
+  Exit:
+ 	return error ? error : n;
+@@ -203,6 +214,11 @@
+ power_attr(pm_trace);
+ #endif /* CONFIG_PM_TRACE */
+ 
++#ifdef CONFIG_USER_WAKELOCK
++power_attr(wake_lock);
++power_attr(wake_unlock);
++#endif
++
+ static struct attribute * g[] = {
+ 	&state_attr.attr,
+ #ifdef CONFIG_PM_TRACE
+@@ -211,6 +227,10 @@
+ #if defined(CONFIG_PM_SLEEP) && defined(CONFIG_PM_DEBUG)
+ 	&pm_test_attr.attr,
+ #endif
++#ifdef CONFIG_USER_WAKELOCK
++	&wake_lock_attr.attr,
++	&wake_unlock_attr.attr,
++#endif
+ 	NULL,
+ };
+ 

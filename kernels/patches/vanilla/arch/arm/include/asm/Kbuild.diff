@@ -1,0 +1,7 @@
+--- ./vanilla//arch/arm/include/asm/Kbuild	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/Kbuild	2012-05-23 10:43:53.859935677 +0300
+@@ -1,3 +1,4 @@
+ include include/asm-generic/Kbuild.asm
+ 
+ unifdef-y += hwcap.h
++header-y += sizes.h

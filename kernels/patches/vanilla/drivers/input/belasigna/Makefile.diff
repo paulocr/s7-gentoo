@@ -1,0 +1,13 @@
+--- ./vanilla//drivers/input/belasigna/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/input/belasigna/Makefile	2012-05-23 10:43:57.783935502 +0300
+@@ -0,0 +1,10 @@
++#
++# Makefile for the accelerometer drivers.
++#
++
++# Each configuration option enables a list of files.
++
++
++
++obj-$(CONFIG_BELASIGNA_BS300)	+= bs300.o
++

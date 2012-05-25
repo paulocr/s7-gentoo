@@ -1,0 +1,10 @@
+--- ./vanilla//drivers/staging/android/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/staging/android/Kconfig	2012-05-23 10:43:59.207935438 +0300
+@@ -2,7 +2,6 @@
+ 
+ config ANDROID
+ 	bool "Android Drivers"
+-	depends on BROKEN
+ 	default N
+ 	---help---
+ 	  Enable support for various drivers needed on the Android platform

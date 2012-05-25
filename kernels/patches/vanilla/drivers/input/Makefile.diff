@@ -1,0 +1,22 @@
+--- ./vanilla//drivers/input/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/Makefile	2012-05-23 10:43:57.782935502 +0300
+@@ -20,8 +20,19 @@
+ obj-$(CONFIG_INPUT_JOYSTICK)	+= joystick/
+ obj-$(CONFIG_INPUT_TABLET)	+= tablet/
+ obj-$(CONFIG_INPUT_TOUCHSCREEN)	+= touchscreen/
++obj-$(CONFIG_INPUT_ACCELEROMETER)	+= accelerometer/
+ obj-$(CONFIG_INPUT_MISC)	+= misc/
+ 
+ obj-$(CONFIG_INPUT_APMPOWER)	+= apm-power.o
++obj-$(CONFIG_INPUT_KEYRESET)	+= keyreset.o
+ 
+ obj-$(CONFIG_XEN_KBDDEV_FRONTEND)	+= xen-kbdfront.o
++
++obj-$(CONFIG_DOCK_DET)	+= dock/
++
++obj-$(CONFIG_INPUT_PEDESTAL)	+= pedestal/
++
++
++obj-$(CONFIG_INPUT_CYPRESS120_I2C_TS)	+= cypress_120/
++
++obj-$(CONFIG_BELASIGNA_BS300)	+= belasigna/

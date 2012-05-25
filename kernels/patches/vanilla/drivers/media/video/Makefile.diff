@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/media/video/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/media/video/Makefile	2012-05-23 10:43:57.945935495 +0300
+@@ -166,6 +166,8 @@
+ 
+ obj-$(CONFIG_ARCH_DAVINCI)	+= davinci/
+ 
++obj-$(CONFIG_MSM_CAMERA) += msm/
++
+ EXTRA_CFLAGS += -Idrivers/media/dvb/dvb-core
+ EXTRA_CFLAGS += -Idrivers/media/dvb/frontends
+ EXTRA_CFLAGS += -Idrivers/media/common/tuners

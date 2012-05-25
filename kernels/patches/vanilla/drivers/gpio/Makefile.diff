@@ -1,0 +1,8 @@
+--- ./vanilla//drivers/gpio/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpio/Makefile	2012-05-23 10:43:57.647935508 +0300
+@@ -19,3 +19,5 @@
+ obj-$(CONFIG_GPIO_BT8XX)	+= bt8xxgpio.o
+ obj-$(CONFIG_GPIO_VR41XX)	+= vr41xx_giu.o
+ obj-$(CONFIG_GPIO_WM831X)	+= wm831x-gpio.o
++obj-$(CONFIG_GPIO_SX150X)	+= sx150x.o
++obj-$(CONFIG_MPP_PMIC8901)	+= pmic8901-mpp.o

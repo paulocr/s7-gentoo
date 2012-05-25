@@ -1,0 +1,17 @@
+--- ./vanilla//drivers/bsp_driver/Kconfig	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/bsp_driver/Kconfig	2012-05-23 10:43:57.460935515 +0300
+@@ -0,0 +1,14 @@
++#
++# Bsp Driver Debug subsystem configuration
++#
++
++menuconfig BSP_DEBUG
++	tristate "Bsp Driver Debug Support"
++	---help---
++	  Bsp Driver Debug Support.
++
++if BSP_DEBUG
++
++source "drivers/bsp_driver/gpio_debug/Kconfig"
++
++endif # BSP_DEBUG

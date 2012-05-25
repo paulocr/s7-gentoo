@@ -1,0 +1,65 @@
+--- ./vanilla//drivers/gpu/drm/drm_irq.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/drm/drm_irq.c	2012-05-23 10:43:57.653935508 +0300
+@@ -56,6 +56,9 @@
+ {
+ 	struct drm_irq_busid *p = data;
+ 
++	if (drm_core_check_feature(dev, DRIVER_USE_PLATFORM_DEVICE))
++		return -EINVAL;
++
+ 	if (!drm_core_check_feature(dev, DRIVER_HAVE_IRQ))
+ 		return -EINVAL;
+ 
+@@ -210,7 +213,7 @@
+ 	if (!drm_core_check_feature(dev, DRIVER_HAVE_IRQ))
+ 		return -EINVAL;
+ 
+-	if (dev->pdev->irq == 0)
++	if (drm_dev_to_irq(dev) == 0)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&dev->struct_mutex);
+@@ -228,7 +231,7 @@
+ 	dev->irq_enabled = 1;
+ 	mutex_unlock(&dev->struct_mutex);
+ 
+-	DRM_DEBUG("irq=%d\n", dev->pdev->irq);
++	DRM_DEBUG("irq=%d\n", drm_dev_to_irq(dev));
+ 
+ 	/* Before installing handler */
+ 	dev->driver->irq_preinstall(dev);
+@@ -301,14 +304,14 @@
+ 	if (!irq_enabled)
+ 		return -EINVAL;
+ 
+-	DRM_DEBUG("irq=%d\n", dev->pdev->irq);
++	DRM_DEBUG("irq=%d\n", drm_dev_to_irq(dev));
+ 
+ 	if (!drm_core_check_feature(dev, DRIVER_MODESET))
+ 		vga_client_register(dev->pdev, NULL, NULL, NULL);
+ 
+ 	dev->driver->irq_uninstall(dev);
+ 
+-	free_irq(dev->pdev->irq, dev);
++	free_irq(drm_dev_to_irq(dev), dev);
+ 
+ 	return 0;
+ }
+@@ -340,7 +343,7 @@
+ 		if (drm_core_check_feature(dev, DRIVER_MODESET))
+ 			return 0;
+ 		if (dev->if_version < DRM_IF_VERSION(1, 2) &&
+-		    ctl->irq != dev->pdev->irq)
++		    ctl->irq != drm_dev_to_irq(dev))
+ 			return -EINVAL;
+ 		return drm_irq_install(dev);
+ 	case DRM_UNINST_HANDLER:
+@@ -589,7 +592,7 @@
+ 	int ret = 0;
+ 	unsigned int flags, seq, crtc;
+ 
+-	if ((!dev->pdev->irq) || (!dev->irq_enabled))
++	if ((!drm_dev_to_irq(dev)) || (!dev->irq_enabled))
+ 		return -EINVAL;
+ 
+ 	if (vblwait->request.type & _DRM_VBLANK_SIGNAL)

@@ -1,0 +1,10 @@
+--- ./vanilla//arch/arm/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/Makefile	2012-05-23 10:43:53.827935677 +0300
+@@ -225,6 +225,7 @@
+ core-$(CONFIG_VFP)		+= arch/arm/vfp/
+ 
+ drivers-$(CONFIG_OPROFILE)      += arch/arm/oprofile/
++core-y                          += arch/arm/perfmon/
+ 
+ libs-y				:= arch/arm/lib/ $(libs-y)
+ 

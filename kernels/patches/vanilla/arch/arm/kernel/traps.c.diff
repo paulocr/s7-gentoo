@@ -1,0 +1,36 @@
+--- ./vanilla//arch/arm/kernel/traps.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/kernel/traps.c	2012-05-23 10:43:53.877935676 +0300
+@@ -438,7 +438,13 @@
+ 		if (end > vma->vm_end)
+ 			end = vma->vm_end;
+ 
+-		flush_cache_user_range(vma, start, end);
++		up_read(&mm->mmap_sem);
++		flush_cache_user_range(start, end);
++
++#ifdef CONFIG_ARCH_MSM7X27
++		dmb();
++#endif
++		return;
+ 	}
+ 	up_read(&mm->mmap_sem);
+ }
+@@ -505,7 +511,8 @@
+ 		thread->tp_value = regs->ARM_r0;
+ #if defined(CONFIG_HAS_TLS_REG)
+ 		asm ("mcr p15, 0, %0, c13, c0, 3" : : "r" (regs->ARM_r0) );
+-#elif !defined(CONFIG_TLS_REG_EMUL)
++//#elif !defined(CONFIG_TLS_REG_EMUL)
++#endif
+ 		/*
+ 		 * User space must never try to access this directly.
+ 		 * Expect your app to break eventually if you do so.
+@@ -513,7 +520,7 @@
+ 		 * (see entry-armv.S for details)
+ 		 */
+ 		*((unsigned int *)0xffff0ff0) = regs->ARM_r0;
+-#endif
++//#endif
+ 		return 0;
+ 
+ #ifdef CONFIG_NEEDS_SYSCALL_FOR_CMPXCHG

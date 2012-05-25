@@ -1,0 +1,22 @@
+--- ./vanilla//drivers/regulator/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/regulator/Kconfig	2012-05-23 10:43:58.744935459 +0300
+@@ -157,5 +157,19 @@
+ 	  three step-down converters and two general-purpose LDO voltage regulators.
+ 	  It supports TI's software based Class-2 SmartReflex implementation.
+ 
++config REGULATOR_PMIC8058
++        tristate "PMIC8058 regulator driver"
++        depends on PMIC8058 && ARCH_MSM8X60
++        default y if PMIC8058 && ARCH_MSM8X60
++        help
++         Say Y here to support the voltage regulators on PMIC8058
++
++config REGULATOR_PMIC8901
++        tristate "PMIC8901 regulator driver"
++        depends on PMIC8901 && ARCH_MSM8X60
++        default y if PMIC8901 && ARCH_MSM8X60
++        help
++         Say Y here to support the voltage regulators on PMIC8901
++
+ endif
+ 

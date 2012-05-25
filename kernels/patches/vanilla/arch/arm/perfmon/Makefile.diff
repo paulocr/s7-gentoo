@@ -1,0 +1,8 @@
+--- ./vanilla//arch/arm/perfmon/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//arch/arm/perfmon/Makefile	2012-05-23 10:43:54.081935667 +0300
+@@ -0,0 +1,5 @@
++obj-$(CONFIG_KSAPI) += ksapi.o
++
++# Object file lists.
++obj-y						+= perf-function-hooks.o
++ksapi-y						+= perf-v7.o per.o per-process-perf.o per-axi.o

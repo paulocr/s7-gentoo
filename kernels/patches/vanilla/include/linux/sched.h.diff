@@ -1,0 +1,12 @@
+--- ./vanilla//include/linux/sched.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/sched.h	2012-05-23 10:44:04.627935197 +0300
+@@ -1724,6 +1724,9 @@
+ extern cputime_t task_stime(struct task_struct *p);
+ extern cputime_t task_gtime(struct task_struct *p);
+ 
++extern int task_free_register(struct notifier_block *n);
++extern int task_free_unregister(struct notifier_block *n);
++
+ /*
+  * Per process flags
+  */

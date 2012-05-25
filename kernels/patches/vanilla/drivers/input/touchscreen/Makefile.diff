@@ -1,0 +1,36 @@
+--- ./vanilla//drivers/input/touchscreen/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/touchscreen/Makefile	2012-05-23 10:43:57.811935501 +0300
+@@ -12,8 +12,10 @@
+ obj-$(CONFIG_TOUCHSCREEN_ATMEL_TSADCC)	+= atmel_tsadcc.o
+ obj-$(CONFIG_TOUCHSCREEN_BITSY)		+= h3600_ts_input.o
+ obj-$(CONFIG_TOUCHSCREEN_CORGI)		+= corgi_ts.o
++obj-$(CONFIG_TOUCHSCREEN_CYPRESS_TMG)	+= cy8c_tmg_ts.o
+ obj-$(CONFIG_TOUCHSCREEN_GUNZE)		+= gunze.o
+ obj-$(CONFIG_TOUCHSCREEN_EETI)		+= eeti_ts.o
++obj-$(CONFIG_TOUCHSCREEN_ELAN_I2C_8232) += elan8232_i2c.o
+ obj-$(CONFIG_TOUCHSCREEN_ELO)		+= elo.o
+ obj-$(CONFIG_TOUCHSCREEN_FUJITSU)	+= fujitsu_ts.o
+ obj-$(CONFIG_TOUCHSCREEN_INEXIO)	+= inexio.o
+@@ -26,6 +28,10 @@
+ obj-$(CONFIG_TOUCHSCREEN_HTCPEN)	+= htcpen.o
+ obj-$(CONFIG_TOUCHSCREEN_USB_COMPOSITE)	+= usbtouchscreen.o
+ obj-$(CONFIG_TOUCHSCREEN_PENMOUNT)	+= penmount.o
++obj-$(CONFIG_TOUCHSCREEN_MSM)		+= msm_ts.o
++obj-$(CONFIG_TOUCHSCREEN_T1320)	+= t1320.o
++obj-$(CONFIG_TOUCHSCREEN_MXT224)	+= mxt224.o mxt224_generic.o
++#obj-$(CONFIG_TOUCHSCREEN_MXT224)	+= atmel_maxtouch.o
+ obj-$(CONFIG_TOUCHSCREEN_TOUCHIT213)	+= touchit213.o
+ obj-$(CONFIG_TOUCHSCREEN_TOUCHRIGHT)	+= touchright.o
+ obj-$(CONFIG_TOUCHSCREEN_TOUCHWIN)	+= touchwin.o
+@@ -42,3 +48,11 @@
+ obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
+ obj-$(CONFIG_TOUCHSCREEN_W90X900)	+= w90p910_ts.o
+ obj-$(CONFIG_TOUCHSCREEN_PCAP)		+= pcap_ts.o
++# added by h00131430 for touchscreen
++ifeq ($(CONFIG_MACH_QSD8X50_SURF_S70), y)
++obj-$(CONFIG_TOUCHSCREEN_MSM_LEGACY)		+= msm_touch-s7.o
++else
++obj-$(CONFIG_TOUCHSCREEN_MSM_LEGACY)		+= msm_touch.o
++endif
++# end added by h00131430 for touchscreen
++obj-$(CONFIG_TOUCHSCREEN_CY8C_TS)	+= cy8c_ts.o

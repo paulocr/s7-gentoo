@@ -1,0 +1,5 @@
+--- ./vanilla//drivers/gpu/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/Makefile	2012-05-23 10:43:57.649935508 +0300
+@@ -1 +1,2 @@
+ obj-y			+= drm/ vga/
++obj-$(CONFIG_MSM_KGSL)	+= msm/

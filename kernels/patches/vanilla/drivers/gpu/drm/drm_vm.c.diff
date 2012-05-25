@@ -1,0 +1,100 @@
+--- ./vanilla//drivers/gpu/drm/drm_vm.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/drm/drm_vm.c	2012-05-23 10:43:57.655935508 +0300
+@@ -60,7 +60,7 @@
+ 		tmp = pgprot_writecombine(tmp);
+ 	else
+ 		tmp = pgprot_noncached(tmp);
+-#elif defined(__sparc__)
++#elif defined(__sparc__) || defined(__arm__)
+ 	tmp = pgprot_noncached(tmp);
+ #endif
+ 	return tmp;
+@@ -432,15 +432,7 @@
+ 	mutex_unlock(&dev->struct_mutex);
+ }
+ 
+-/**
+- * \c close method for all virtual memory types.
+- *
+- * \param vma virtual memory area.
+- *
+- * Search the \p vma private data entry in drm_device::vmalist, unlink it, and
+- * free it.
+- */
+-static void drm_vm_close(struct vm_area_struct *vma)
++void drm_vm_close_locked(struct vm_area_struct *vma)
+ {
+ 	struct drm_file *priv = vma->vm_file->private_data;
+ 	struct drm_device *dev = priv->minor->dev;
+@@ -450,7 +442,6 @@
+ 		  vma->vm_start, vma->vm_end - vma->vm_start);
+ 	atomic_dec(&dev->vma_count);
+ 
+-	mutex_lock(&dev->struct_mutex);
+ 	list_for_each_entry_safe(pt, temp, &dev->vmalist, head) {
+ 		if (pt->vma == vma) {
+ 			list_del(&pt->head);
+@@ -458,6 +449,23 @@
+ 			break;
+ 		}
+ 	}
++}
++
++/**
++ * \c close method for all virtual memory types.
++ *
++ * \param vma virtual memory area.
++ *
++ * Search the \p vma private data entry in drm_device::vmalist, unlink it, and
++ * free it.
++ */
++static void drm_vm_close(struct vm_area_struct *vma)
++{
++	struct drm_file *priv = vma->vm_file->private_data;
++	struct drm_device *dev = priv->minor->dev;
++
++	mutex_lock(&dev->struct_mutex);
++	drm_vm_close_locked(vma);
+ 	mutex_unlock(&dev->struct_mutex);
+ }
+ 
+@@ -600,6 +608,7 @@
+ 	}
+ 
+ 	switch (map->type) {
++#if !defined(__arm__)
+ 	case _DRM_AGP:
+ 		if (drm_core_has_AGP(dev) && dev->agp->cant_use_aperture) {
+ 			/*
+@@ -614,20 +623,31 @@
+ 			break;
+ 		}
+ 		/* fall through to _DRM_FRAME_BUFFER... */
++#endif
+ 	case _DRM_FRAME_BUFFER:
+ 	case _DRM_REGISTERS:
+ 		offset = dev->driver->get_reg_ofs(dev);
+ 		vma->vm_flags |= VM_IO;	/* not in core dump */
+ 		vma->vm_page_prot = drm_io_prot(map->type, vma);
++#if !defined(__arm__)
+ 		if (io_remap_pfn_range(vma, vma->vm_start,
+ 				       (map->offset + offset) >> PAGE_SHIFT,
+ 				       vma->vm_end - vma->vm_start,
+ 				       vma->vm_page_prot))
+ 			return -EAGAIN;
++#else
++		if (remap_pfn_range(vma, vma->vm_start,
++					(map->offset + offset) >> PAGE_SHIFT,
++					vma->vm_end - vma->vm_start,
++					vma->vm_page_prot))
++			return -EAGAIN;
++#endif
++
+ 		DRM_DEBUG("   Type = %d; start = 0x%lx, end = 0x%lx,"
+ 			  " offset = 0x%llx\n",
+ 			  map->type,
+ 			  vma->vm_start, vma->vm_end, (unsigned long long)(map->offset + offset));
++
+ 		vma->vm_ops = &drm_vm_ops;
+ 		break;
+ 	case _DRM_CONSISTENT:

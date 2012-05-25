@@ -1,0 +1,14 @@
+--- ./vanilla//arch/arm/mach-msm/include/mach/system.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-msm/include/mach/system.h	2012-05-23 10:43:53.963935670 +0300
+@@ -21,3 +21,11 @@
+ {
+ 	for (;;) ;  /* depends on IPC w/ other core */
+ }
++
++/* low level hardware reset hook -- for example, hitting the
++ * PSHOLD line on the PMIC to hard reset the system
++ */
++extern void (*msm_hw_reset_hook)(void);
++
++void msm_set_i2c_mux(bool gpio, int *gpio_clk, int *gpio_dat);
++

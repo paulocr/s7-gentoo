@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/staging/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/staging/Makefile	2012-05-23 10:43:59.206935438 +0300
+@@ -26,7 +26,7 @@
+ obj-$(CONFIG_INPUT_MIMIO)	+= mimio/
+ obj-$(CONFIG_TRANZPORT)		+= frontier/
+ obj-$(CONFIG_ANDROID)		+= android/
+-obj-$(CONFIG_ANDROID)		+= dream/
++obj-$(CONFIG_STAGING_DREAM)	+= dream/
+ obj-$(CONFIG_DST)		+= dst/
+ obj-$(CONFIG_POHMELFS)		+= pohmelfs/
+ obj-$(CONFIG_B3DFG)		+= b3dfg/

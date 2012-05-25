@@ -1,0 +1,15 @@
+--- ./vanilla//net/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/Kconfig	2012-05-23 10:44:04.797935187 +0300
+@@ -79,6 +79,12 @@
+ 
+ endif # if INET
+ 
++config ANDROID_PARANOID_NETWORK
++	bool "Only allow certain groups to create sockets"
++	default y
++	help
++		none
++
+ config NETWORK_SECMARK
+ 	bool "Security Marking"
+ 	help

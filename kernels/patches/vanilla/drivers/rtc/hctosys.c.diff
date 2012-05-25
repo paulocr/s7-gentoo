@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/rtc/hctosys.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/rtc/hctosys.c	2012-05-23 10:43:58.748935459 +0300
+@@ -22,7 +22,7 @@
+  * the best guess is to add 0.5s.
+  */
+ 
+-static int __init rtc_hctosys(void)
++int rtc_hctosys(void)
+ {
+ 	int err;
+ 	struct rtc_time tm;

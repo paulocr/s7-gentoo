@@ -1,0 +1,20 @@
+--- ./vanilla//net/ipv6/addrconf.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/ipv6/addrconf.c	2012-05-23 10:44:04.860935186 +0300
+@@ -1559,6 +1559,9 @@
+ 		return addrconf_ifid_infiniband(eui, dev);
+ 	case ARPHRD_SIT:
+ 		return addrconf_ifid_sit(eui, dev);
++	case ARPHRD_RAWIP:
++		get_random_bytes(eui, 8);
++		return 0;
+ 	}
+ 	return -1;
+ }
+@@ -2349,6 +2352,7 @@
+ 	    (dev->type != ARPHRD_FDDI) &&
+ 	    (dev->type != ARPHRD_IEEE802_TR) &&
+ 	    (dev->type != ARPHRD_ARCNET) &&
++	    (dev->type != ARPHRD_RAWIP) &&
+ 	    (dev->type != ARPHRD_INFINIBAND)) {
+ 		/* Alas, we support only Ethernet autoconfiguration. */
+ 		return;

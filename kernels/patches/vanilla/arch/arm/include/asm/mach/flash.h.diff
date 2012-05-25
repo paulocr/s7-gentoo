@@ -1,0 +1,18 @@
+--- ./vanilla//arch/arm/include/asm/mach/flash.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/mach/flash.h	2012-05-23 10:43:53.866935676 +0300
+@@ -17,6 +17,7 @@
+  * map_name:	the map probe function name
+  * name:	flash device name (eg, as used with mtdparts=)
+  * width:	width of mapped device
++ * interleave:  interleave mode feature support
+  * init:	method called at driver/device initialisation
+  * exit:	method called at driver/device removal
+  * set_vpp:	method called to enable or disable VPP
+@@ -28,6 +29,7 @@
+ 	const char	*map_name;
+ 	const char	*name;
+ 	unsigned int	width;
++	unsigned int    interleave;
+ 	int		(*init)(void);
+ 	void		(*exit)(void);
+ 	void		(*set_vpp)(int on);

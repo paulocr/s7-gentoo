@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/oprofile/op_model_v6.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/oprofile/op_model_v6.c	2012-05-23 10:43:54.081935667 +0300
+@@ -32,6 +32,8 @@
+ static int irqs[] = {
+ #ifdef CONFIG_ARCH_OMAP2
+ 	3,
++#else defined(CONFIG_ARCH_MSM)
++	INT_ARM11_PMU,
+ #endif
+ #ifdef CONFIG_ARCH_BCMRING
+ 	IRQ_PMUIRQ, /* for BCMRING, ARM PMU interrupt is 43 */

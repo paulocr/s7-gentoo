@@ -1,0 +1,28 @@
+--- ./vanilla//net/rfkill/core.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/rfkill/core.c	2012-05-23 10:44:04.916935184 +0300
+@@ -741,6 +741,7 @@
+ }
+ EXPORT_SYMBOL(rfkill_pause_polling);
+ 
++#ifdef CONFIG_RFKILL_PM
+ void rfkill_resume_polling(struct rfkill *rfkill)
+ {
+ 	BUG_ON(!rfkill);
+@@ -775,14 +776,17 @@
+ 
+ 	return 0;
+ }
++#endif
+ 
+ static struct class rfkill_class = {
+ 	.name		= "rfkill",
+ 	.dev_release	= rfkill_release,
+ 	.dev_attrs	= rfkill_dev_attrs,
+ 	.dev_uevent	= rfkill_dev_uevent,
++#ifdef CONFIG_RFKILL_PM
+ 	.suspend	= rfkill_suspend,
+ 	.resume		= rfkill_resume,
++#endif
+ };
+ 
+ bool rfkill_blocked(struct rfkill *rfkill)

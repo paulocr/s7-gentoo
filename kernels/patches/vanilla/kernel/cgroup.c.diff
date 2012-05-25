@@ -1,0 +1,49 @@
+--- ./vanilla//kernel/cgroup.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/cgroup.c	2012-05-23 10:44:04.720935193 +0300
+@@ -51,6 +51,7 @@
+ #include <linux/pid_namespace.h>
+ #include <linux/idr.h>
+ #include <linux/vmalloc.h> /* TODO: replace with more sophisticated array */
++#include <linux/capability.h>
+ 
+ #include <asm/atomic.h>
+ 
+@@ -1555,6 +1556,15 @@
+ 			retval = ss->can_attach(ss, cgrp, tsk, false);
+ 			if (retval)
+ 				return retval;
++		} else if (!capable(CAP_SYS_ADMIN)) {
++			const struct cred *cred = current_cred(), *tcred;
++
++			/* No can_attach() - check perms generically */
++			tcred = __task_cred(tsk);
++			if (cred->euid != tcred->uid &&
++			    cred->euid != tcred->suid) {
++				return -EACCES;
++			}
+ 		}
+ 	}
+ 
+@@ -1611,7 +1621,6 @@
+ static int attach_task_by_pid(struct cgroup *cgrp, u64 pid)
+ {
+ 	struct task_struct *tsk;
+-	const struct cred *cred = current_cred(), *tcred;
+ 	int ret;
+ 
+ 	if (pid) {
+@@ -1621,14 +1630,6 @@
+ 			rcu_read_unlock();
+ 			return -ESRCH;
+ 		}
+-
+-		tcred = __task_cred(tsk);
+-		if (cred->euid &&
+-		    cred->euid != tcred->uid &&
+-		    cred->euid != tcred->suid) {
+-			rcu_read_unlock();
+-			return -EACCES;
+-		}
+ 		get_task_struct(tsk);
+ 		rcu_read_unlock();
+ 	} else {

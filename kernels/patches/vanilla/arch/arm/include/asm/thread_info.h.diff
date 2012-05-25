@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/include/asm/thread_info.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/thread_info.h	2012-05-23 10:43:53.870935676 +0300
+@@ -75,7 +75,7 @@
+ 	.flags		= 0,						\
+ 	.preempt_count	= INIT_PREEMPT_COUNT,				\
+ 	.addr_limit	= KERNEL_DS,					\
+-	.cpu_domain	= domain_val(DOMAIN_USER, DOMAIN_MANAGER) |	\
++	.cpu_domain	= domain_val(DOMAIN_USER, DOMAIN_CLIENT) |	\
+ 			  domain_val(DOMAIN_KERNEL, DOMAIN_MANAGER) |	\
+ 			  domain_val(DOMAIN_IO, DOMAIN_CLIENT),		\
+ 	.restart_block	= {						\

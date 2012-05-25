@@ -1,0 +1,11 @@
+--- ./vanilla//include/net/tcp.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/net/tcp.h	2012-05-23 10:44:04.681935194 +0300
+@@ -1449,6 +1449,8 @@
+ extern int tcp_gro_complete(struct sk_buff *skb);
+ extern int tcp4_gro_complete(struct sk_buff *skb);
+ 
++extern void tcp_v4_nuke_addr(__u32 saddr);
++
+ #ifdef CONFIG_PROC_FS
+ extern int  tcp4_proc_init(void);
+ extern void tcp4_proc_exit(void);

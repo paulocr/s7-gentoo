@@ -1,0 +1,13 @@
+--- ./vanilla//include/linux/fb.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/fb.h	2012-05-23 10:44:04.559935200 +0300
+@@ -15,6 +15,10 @@
+ #define FBIOGET_VSCREENINFO	0x4600
+ #define FBIOPUT_VSCREENINFO	0x4601
+ #define FBIOGET_FSCREENINFO	0x4602
++#ifdef CONFIG_MSM_HDMI
++#define FBIOSET_MFD_INFO	0x4603
++#endif
++
+ #define FBIOGETCMAP		0x4604
+ #define FBIOPUTCMAP		0x4605
+ #define FBIOPAN_DISPLAY		0x4606

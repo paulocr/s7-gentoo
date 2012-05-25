@@ -1,0 +1,10 @@
+--- ./vanilla//include/linux/serial_core.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/serial_core.h	2012-05-23 10:44:04.630935197 +0300
+@@ -217,6 +217,7 @@
+ 	void		(*pm)(struct uart_port *, unsigned int state,
+ 			      unsigned int oldstate);
+ 	int		(*set_wake)(struct uart_port *, unsigned int state);
++	void		(*wake_peer)(struct uart_port *);
+ 
+ 	/*
+ 	 * Return a string describing the type of the port

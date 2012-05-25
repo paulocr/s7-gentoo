@@ -1,0 +1,10 @@
+--- ./vanilla//mm/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//mm/Makefile	2012-05-23 10:44:04.776935190 +0300
+@@ -22,6 +22,7 @@
+ obj-$(CONFIG_NUMA) 	+= mempolicy.o
+ obj-$(CONFIG_SPARSEMEM)	+= sparse.o
+ obj-$(CONFIG_SPARSEMEM_VMEMMAP) += sparse-vmemmap.o
++obj-$(CONFIG_ASHMEM) += ashmem.o
+ obj-$(CONFIG_TMPFS_POSIX_ACL) += shmem_acl.o
+ obj-$(CONFIG_SLOB) += slob.o
+ obj-$(CONFIG_MMU_NOTIFIER) += mmu_notifier.o

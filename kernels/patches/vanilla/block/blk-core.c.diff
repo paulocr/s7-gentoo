@@ -1,0 +1,28 @@
+--- ./vanilla//block/blk-core.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//block/blk-core.c	2012-05-23 10:43:57.371935518 +0300
+@@ -1437,6 +1437,10 @@
+ 			goto end_io;
+ 		}
+ 
++		if (unlikely(!q->queuedata)) {
++			goto end_io;
++ 		}
++		
+ 		if (unlikely(!bio_rw_flagged(bio, BIO_RW_DISCARD) &&
+ 			     nr_sectors > queue_max_hw_sectors(q))) {
+ 			printk(KERN_ERR "bio too big device %s (%u > %u)\n",
+@@ -1569,11 +1573,12 @@
+ 
+ 		if (unlikely(block_dump)) {
+ 			char b[BDEVNAME_SIZE];
+-			printk(KERN_DEBUG "%s(%d): %s block %Lu on %s\n",
++			printk(KERN_DEBUG "%s(%d): %s block %Lu on %s (%u sectors)\n",
+ 			current->comm, task_pid_nr(current),
+ 				(rw & WRITE) ? "WRITE" : "READ",
+ 				(unsigned long long)bio->bi_sector,
+-				bdevname(bio->bi_bdev, b));
++				bdevname(bio->bi_bdev, b),
++				count);
+ 		}
+ 	}
+ 

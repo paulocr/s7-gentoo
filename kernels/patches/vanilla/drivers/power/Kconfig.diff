@@ -1,0 +1,54 @@
+--- ./vanilla//drivers/power/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/power/Kconfig	2012-05-23 10:43:58.737935459 +0300
+@@ -57,6 +57,12 @@
+ 	  Say Y here to enable support for the DS2782 standalone battery
+ 	  gas-gauge.
+ 
++config BATTERY_DS2784
++	tristate "DS2784 battery driver "
++	select W1
++	help
++	  Say Y here to enable support for batteries with ds2784 chip.
++
+ config BATTERY_PMU
+ 	tristate "Apple PMU battery"
+ 	depends on PPC32 && ADB_PMU
+@@ -89,6 +95,12 @@
+ 	help
+ 	  Say Y here to enable support for batteries with BQ27200(I2C) chip.
+ 
++config BATTERY_BQ275X0
++	bool "BQ275x0 battery driver"
++	depends on I2C
++	help
++	  Say Y here to enable support for batteries with BQ275x0(I2C) chip.
++	  
+ config BATTERY_DA9030
+ 	tristate "DA9030 battery driver"
+ 	depends on PMIC_DA903X
+@@ -110,4 +122,25 @@
+ 	help
+ 	 Say Y to include support for NXP PCF50633 Main Battery Charger.
+ 
++config BATTERY_MSM
++	tristate "MSM battery"
++	depends on ARCH_MSM
++	default m
++	help
++	  Say Y to enable support for the battery in Qualcomm MSM.
++
++config BATTERY_MSM_FAKE
++	tristate "Fake MSM battery"
++	depends on ARCH_MSM && BATTERY_MSM
++	default n
++	help
++	  Say Y to bypass actual battery queries.
++
++config LIGHT_SENSOR_PO188
++	bool "Light sensor po188"
++	depends on ARCH_MSM
++	default y
++	help
++	  Say Y to enable support for light sensor for po188
++
+ endif # POWER_SUPPLY

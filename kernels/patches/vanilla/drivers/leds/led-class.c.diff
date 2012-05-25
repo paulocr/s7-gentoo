@@ -1,0 +1,88 @@
+--- ./vanilla//drivers/leds/led-class.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/leds/led-class.c	2012-05-23 10:43:57.867935497 +0300
+@@ -22,6 +22,15 @@
+ #include <linux/leds.h>
+ #include "leds.h"
+ 
++#if 1
++#include <mach/io.h>
++#include "../video/msm/mdp.h"
++#include "../video/msm/msm_fb.h"
++#include "../video/msm/mdp4.h"
++
++#define MDP_BASE    0xAA200000
++#define LCDC_BASE   0xE0000
++#endif
+ static struct class *leds_class;
+ 
+ static void led_update_brightness(struct led_classdev *led_cdev)
+@@ -64,6 +73,51 @@
+ 	return ret;
+ }
+ 
++static ssize_t test_led_brightness_show(struct device *dev, 
++		struct device_attribute *attr, char *buf)
++{
++	struct led_classdev *led_cdev = dev_get_drvdata(dev);
++
++	/* no lock needed for this */
++	led_update_brightness(led_cdev);
++
++	return sprintf(buf, "%u\n", led_cdev->brightness);
++}
++
++static ssize_t test_led_brightness_store(struct device *dev,
++		struct device_attribute *attr, const char *buf, size_t size)
++{
++	struct led_classdev *led_cdev = dev_get_drvdata(dev);
++	ssize_t ret = -EINVAL;
++	char *after;
++	unsigned long state = simple_strtoul(buf, &after, 10);
++	size_t count = after - buf;
++    unsigned int virt_addr;
++
++	if (*after && isspace(*after))
++		count++;
++
++	if (count == size) {
++		ret = count;
++
++		if (state == LED_OFF)
++        {
++	       led_trigger_remove(led_cdev);
++		   led_set_brightness(led_cdev, state);
++	      // virt_addr = (unsigned int)ioremap(MDP_BASE + LCDC_BASE, 0x1000);
++	      // MDP_OUTP(virt_addr, 0);
++	      // iounmap((void *)virt_addr);
++        }
++        //else
++        //{
++        //   virt_addr = (unsigned int)ioremap(MDP_BASE + LCDC_BASE, 0x1000);
++	    //   MDP_OUTP(virt_addr, 1);
++	    //   iounmap((void *)virt_addr);
++        //}
++	}
++
++	return ret;
++}
+ static ssize_t led_max_brightness_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+@@ -73,6 +127,7 @@
+ }
+ 
+ static DEVICE_ATTR(brightness, 0644, led_brightness_show, led_brightness_store);
++static DEVICE_ATTR(test_brightness, 0666, test_led_brightness_show, test_led_brightness_store);
+ static DEVICE_ATTR(max_brightness, 0444, led_max_brightness_show, NULL);
+ #ifdef CONFIG_LEDS_TRIGGERS
+ static DEVICE_ATTR(trigger, 0644, led_trigger_show, led_trigger_store);
+@@ -138,6 +193,9 @@
+ 	rc = device_create_file(led_cdev->dev, &dev_attr_brightness);
+ 	if (rc)
+ 		goto err_out;
++    rc = device_create_file(led_cdev->dev, &dev_attr_test_brightness);
++    if (rc)
++       goto err_out;
+ 
+ #ifdef CONFIG_LEDS_TRIGGERS
+ 	init_rwsem(&led_cdev->trigger_lock);

@@ -1,0 +1,11 @@
+--- ./vanilla//include/linux/regulator/consumer.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/regulator/consumer.h	2012-05-23 10:44:04.623935197 +0300
+@@ -35,6 +35,8 @@
+ #ifndef __LINUX_REGULATOR_CONSUMER_H_
+ #define __LINUX_REGULATOR_CONSUMER_H_
+ 
++#include <linux/device.h>
++
+ /*
+  * Regulator operating modes.
+  *

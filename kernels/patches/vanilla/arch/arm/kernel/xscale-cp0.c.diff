@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/kernel/xscale-cp0.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/kernel/xscale-cp0.c	2012-05-23 10:43:53.877935676 +0300
+@@ -70,7 +70,7 @@
+ 		 * initialised state information on the first fault.
+ 		 */
+ 
+-	case THREAD_NOTIFY_RELEASE:
++	case THREAD_NOTIFY_EXIT:
+ 		iwmmxt_task_release(thread);
+ 		break;
+ 

@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/mach-iop13xx/include/mach/memory.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-iop13xx/include/mach/memory.h	2012-05-23 10:43:53.915935674 +0300
+@@ -64,6 +64,8 @@
+ 		(dma_addr_t)page_to_phys(page);				\
+ 	})
+ 
++#define __arch_dma_to_page(dev, addr)	phys_to_page(addr)
++
+ #endif /* CONFIG_ARCH_IOP13XX */
+ #endif /* !ASSEMBLY */
+ 

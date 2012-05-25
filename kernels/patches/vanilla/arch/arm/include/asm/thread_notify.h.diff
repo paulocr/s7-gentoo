@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/include/asm/thread_notify.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/thread_notify.h	2012-05-23 10:43:53.870935676 +0300
+@@ -41,7 +41,7 @@
+  * These are the reason codes for the thread notifier.
+  */
+ #define THREAD_NOTIFY_FLUSH	0
+-#define THREAD_NOTIFY_RELEASE	1
++#define THREAD_NOTIFY_EXIT	1
+ #define THREAD_NOTIFY_SWITCH	2
+ 
+ #endif

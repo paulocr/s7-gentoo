@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/mach-msm/include/mach/io.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-msm/include/mach/io.h	2012-05-23 10:43:53.953935673 +0300
+@@ -23,7 +23,7 @@
+ 
+ void __iomem *__msm_ioremap(unsigned long phys_addr, size_t size, unsigned int mtype);
+ 
+-#define __io(a)		__typesafe_io(a)
++#define __io(a)         __typesafe_io(a)
+ #define __mem_pci(a)    (a)
+ 
+ #endif

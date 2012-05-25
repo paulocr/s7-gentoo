@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/input/dock/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/input/dock/Makefile	2012-05-23 10:43:57.785935502 +0300
+@@ -0,0 +1,8 @@
++#
++# Makefile for the dock drivers.
++#
++
++# Each configuration option enables a list of files.
++
++obj-$(CONFIG_DOCK_DET)	+= dock_det.o
++

@@ -1,0 +1,36 @@
+--- ./vanilla//drivers/input/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/Kconfig	2012-05-23 10:43:57.782935502 +0300
+@@ -149,6 +149,15 @@
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called apm-power.
+ 
++config INPUT_KEYRESET
++	tristate "Reset key"
++	depends on INPUT
++	---help---
++	  Say Y here if you want to reboot when some keys are pressed;
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called keyreset.
++
+ config XEN_KBDDEV_FRONTEND
+ 	tristate "Xen virtual keyboard and mouse support"
+ 	depends on XEN_FBDEV_FRONTEND
+@@ -169,9 +178,17 @@
+ source "drivers/input/tablet/Kconfig"
+ 
+ source "drivers/input/touchscreen/Kconfig"
++source "drivers/input/accelerometer/Kconfig"
+ 
+ source "drivers/input/misc/Kconfig"
+ 
++source "drivers/input/pedestal/Kconfig"
++
++source "drivers/input/cypress_120/Kconfig"
++
++source "drivers/input/dock/Kconfig"
++
++source "drivers/input/belasigna/Kconfig"
+ endif
+ 
+ menu "Hardware I/O ports"

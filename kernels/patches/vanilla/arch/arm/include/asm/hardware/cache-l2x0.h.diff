@@ -1,0 +1,12 @@
+--- ./vanilla//arch/arm/include/asm/hardware/cache-l2x0.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/hardware/cache-l2x0.h	2012-05-23 10:43:53.862935677 +0300
+@@ -53,6 +53,9 @@
+ 
+ #ifndef __ASSEMBLY__
+ extern void __init l2x0_init(void __iomem *base, __u32 aux_val, __u32 aux_mask);
++extern void l2x0_suspend(void);
++extern void l2x0_resume(int collapsed);
++extern void l2x0_cache_sync(void);
+ #endif
+ 
+ #endif

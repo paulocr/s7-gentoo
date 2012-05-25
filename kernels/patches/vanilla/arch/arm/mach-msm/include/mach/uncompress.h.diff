@@ -1,0 +1,20 @@
+--- ./vanilla//arch/arm/mach-msm/include/mach/uncompress.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-msm/include/mach/uncompress.h	2012-05-23 10:43:53.963935670 +0300
+@@ -15,10 +15,16 @@
+ 
+ #ifndef __ASM_ARCH_MSM_UNCOMPRESS_H
+ 
+-#include "hardware.h"
++#include "linux/io.h"
++#include "mach/msm_iomap.h"
+ 
+ static void putc(int c)
+ {
++#if defined(MSM_DEBUG_UART_PHYS)
++	unsigned base = MSM_DEBUG_UART_PHYS;
++	while (!(readl(base + 0x08) & 0x04)) ;
++	writel(c, base + 0x0c);
++#endif
+ }
+ 
+ static inline void flush(void)

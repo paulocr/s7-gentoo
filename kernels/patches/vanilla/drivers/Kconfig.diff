@@ -1,0 +1,19 @@
+--- ./vanilla//drivers/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/Kconfig	2012-05-23 10:43:57.387935520 +0300
+@@ -90,6 +90,8 @@
+ 
+ source "drivers/leds/Kconfig"
+ 
++source "drivers/switch/Kconfig"
++
+ source "drivers/accessibility/Kconfig"
+ 
+ source "drivers/infiniband/Kconfig"
+@@ -113,4 +115,7 @@
+ source "drivers/staging/Kconfig"
+ 
+ source "drivers/platform/Kconfig"
++
++source "drivers/bsp_driver/Kconfig"
++
+ endmenu

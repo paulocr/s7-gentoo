@@ -1,0 +1,19 @@
+--- ./vanilla//drivers/input/mouse/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/mouse/Kconfig	2012-05-23 10:43:57.801935501 +0300
+@@ -270,6 +270,16 @@
+ 	  described in the source file). This driver also works with the
+ 	  digitizer (VSXXX-AB) DEC produced.
+ 
++config MOUSE_OFN_HID
++	tristate "hid Optical finger navigation"
++	depends on ARCH_MSM_SCORPION && I2C_MSM
++	default n
++	help
++	  Say Y here if you have an hid OFN device attached.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called ofn_hid.
++
+ config MOUSE_GPIO
+ 	tristate "GPIO mouse"
+ 	depends on GENERIC_GPIO

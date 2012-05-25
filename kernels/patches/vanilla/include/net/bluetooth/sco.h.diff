@@ -1,0 +1,20 @@
+--- ./vanilla//include/net/bluetooth/sco.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/net/bluetooth/sco.h	2012-05-23 10:44:04.665935195 +0300
+@@ -37,6 +37,7 @@
+ struct sockaddr_sco {
+ 	sa_family_t	sco_family;
+ 	bdaddr_t	sco_bdaddr;
++	__u16		sco_pkt_type;
+ };
+ 
+ /* SCO socket options */
+@@ -72,7 +73,8 @@
+ 
+ struct sco_pinfo {
+ 	struct bt_sock	bt;
+-	__u32		flags;
++	__u16		pkt_type;
++
+ 	struct sco_conn	*conn;
+ };
+ 

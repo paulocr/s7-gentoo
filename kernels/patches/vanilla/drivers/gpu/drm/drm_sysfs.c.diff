@@ -1,0 +1,15 @@
+--- ./vanilla//drivers/gpu/drm/drm_sysfs.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/drm/drm_sysfs.c	2012-05-23 10:43:57.654935508 +0300
+@@ -486,7 +486,11 @@
+ 	int err;
+ 	char *minor_str;
+ 
+-	minor->kdev.parent = &minor->dev->pdev->dev;
++	if (minor->dev->platformdev != NULL)
++		minor->kdev.parent = &minor->dev->platformdev->dev;
++	else
++		minor->kdev.parent = &minor->dev->pdev->dev;
++
+ 	minor->kdev.class = drm_class;
+ 	minor->kdev.release = drm_sysfs_device_release;
+ 	minor->kdev.devt = minor->device;

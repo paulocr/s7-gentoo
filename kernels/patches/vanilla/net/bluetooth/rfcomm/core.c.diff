@@ -1,0 +1,183 @@
+--- ./vanilla//net/bluetooth/rfcomm/core.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/bluetooth/rfcomm/core.c	2012-05-23 10:44:04.812935188 +0300
+@@ -244,33 +244,6 @@
+ 								auth_type);
+ }
+ 
+-static void rfcomm_session_timeout(unsigned long arg)
+-{
+-	struct rfcomm_session *s = (void *) arg;
+-
+-	BT_DBG("session %p state %ld", s, s->state);
+-
+-	set_bit(RFCOMM_TIMED_OUT, &s->flags);
+-	rfcomm_session_put(s);
+-	rfcomm_schedule(RFCOMM_SCHED_TIMEO);
+-}
+-
+-static void rfcomm_session_set_timer(struct rfcomm_session *s, long timeout)
+-{
+-	BT_DBG("session %p state %ld timeout %ld", s, s->state, timeout);
+-
+-	if (!mod_timer(&s->timer, jiffies + timeout))
+-		rfcomm_session_hold(s);
+-}
+-
+-static void rfcomm_session_clear_timer(struct rfcomm_session *s)
+-{
+-	BT_DBG("session %p state %ld", s, s->state);
+-
+-	if (timer_pending(&s->timer) && del_timer(&s->timer))
+-		rfcomm_session_put(s);
+-}
+-
+ /* ---- RFCOMM DLCs ---- */
+ static void rfcomm_dlc_timeout(unsigned long arg)
+ {
+@@ -347,7 +320,6 @@
+ 
+ 	rfcomm_session_hold(s);
+ 
+-	rfcomm_session_clear_timer(s);
+ 	rfcomm_dlc_hold(d);
+ 	list_add(&d->list, &s->dlcs);
+ 	d->session = s;
+@@ -363,9 +335,6 @@
+ 	d->session = NULL;
+ 	rfcomm_dlc_put(d);
+ 
+-	if (list_empty(&s->dlcs))
+-		rfcomm_session_set_timer(s, RFCOMM_IDLE_TIMEOUT);
+-
+ 	rfcomm_session_put(s);
+ }
+ 
+@@ -459,7 +428,6 @@
+ 
+ 	switch (d->state) {
+ 	case BT_CONNECT:
+-	case BT_CONFIG:
+ 		if (test_and_clear_bit(RFCOMM_DEFER_SETUP, &d->flags)) {
+ 			set_bit(RFCOMM_AUTH_REJECT, &d->flags);
+ 			rfcomm_schedule(RFCOMM_SCHED_AUTH);
+@@ -479,7 +447,6 @@
+ 		break;
+ 
+ 	case BT_OPEN:
+-	case BT_CONNECT2:
+ 		if (test_and_clear_bit(RFCOMM_DEFER_SETUP, &d->flags)) {
+ 			set_bit(RFCOMM_AUTH_REJECT, &d->flags);
+ 			rfcomm_schedule(RFCOMM_SCHED_AUTH);
+@@ -598,8 +565,6 @@
+ 
+ 	BT_DBG("session %p sock %p", s, sock);
+ 
+-	setup_timer(&s->timer, rfcomm_session_timeout, (unsigned long) s);
+-
+ 	INIT_LIST_HEAD(&s->dlcs);
+ 	s->state = state;
+ 	s->sock  = sock;
+@@ -625,13 +590,19 @@
+ 	int state = s->state;
+ 
+ 	BT_DBG("session %p state %ld", s, s->state);
+-
++		/*
++     *Deleteing a list which had been deleted will cause system 
++     *death.In order to avoid it,we should test whether it had
++     *been deleted or not.
++     */
++    if(((&s->list)->next == LIST_POISON1) && ((&s->list)->prev == LIST_POISON2))
++        return ;
++	
+ 	list_del(&s->list);
+ 
+ 	if (state == BT_CONNECTED)
+ 		rfcomm_send_disc(s, 0);
+ 
+-	rfcomm_session_clear_timer(s);
+ 	sock_release(s->sock);
+ 	kfree(s);
+ 
+@@ -673,7 +644,6 @@
+ 		__rfcomm_dlc_close(d, err);
+ 	}
+ 
+-	rfcomm_session_clear_timer(s);
+ 	rfcomm_session_put(s);
+ }
+ 
+@@ -1148,7 +1118,8 @@
+ 			break;
+ 
+ 		case BT_DISCONN:
+-			rfcomm_session_put(s);
++			if (s->sock->sk->sk_state != BT_CLOSED)
++				rfcomm_session_put(s);
+ 			break;
+ 		}
+ 	}
+@@ -1229,8 +1200,6 @@
+ 
+ 	rfcomm_send_ua(d->session, d->dlci);
+ 
+-	rfcomm_dlc_clear_timer(d);
+-
+ 	rfcomm_dlc_lock(d);
+ 	d->state = BT_CONNECTED;
+ 	d->state_change(d, 0);
+@@ -1248,11 +1217,6 @@
+ 		if (d->defer_setup) {
+ 			set_bit(RFCOMM_DEFER_SETUP, &d->flags);
+ 			rfcomm_dlc_set_timer(d, RFCOMM_AUTH_TIMEOUT);
+-
+-			rfcomm_dlc_lock(d);
+-			d->state = BT_CONNECT2;
+-			d->state_change(d, 0);
+-			rfcomm_dlc_unlock(d);
+ 		} else
+ 			rfcomm_dlc_accept(d);
+ 	} else {
+@@ -1794,11 +1758,6 @@
+ 				if (d->defer_setup) {
+ 					set_bit(RFCOMM_DEFER_SETUP, &d->flags);
+ 					rfcomm_dlc_set_timer(d, RFCOMM_AUTH_TIMEOUT);
+-
+-					rfcomm_dlc_lock(d);
+-					d->state = BT_CONNECT2;
+-					d->state_change(d, 0);
+-					rfcomm_dlc_unlock(d);
+ 				} else
+ 					rfcomm_dlc_accept(d);
+ 			}
+@@ -1841,8 +1800,15 @@
+ 
+ 	if (sk->sk_state == BT_CLOSED) {
+ 		if (!s->initiator)
+-			rfcomm_session_put(s);
+-
++		{
++			/*
++			 *Function rfcomm_session_close has included rfcomm_session_del.
++			 *It's repeated use rfcomm_session_put whitch also include 
++			 *rfcomm_session_del function .So we use atomic_dec as substitute.
++			 */
++                    //rfcomm_session_put(s);
++                    atomic_dec(&s->refcnt);
++		}	
+ 		rfcomm_session_close(s, sk->sk_err);
+ 	}
+ }
+@@ -1914,12 +1880,6 @@
+ 		struct rfcomm_session *s;
+ 		s = list_entry(p, struct rfcomm_session, list);
+ 
+-		if (test_and_clear_bit(RFCOMM_TIMED_OUT, &s->flags)) {
+-			s->state = BT_DISCONN;
+-			rfcomm_send_disc(s, 0);
+-			continue;
+-		}
+-
+ 		if (s->state == BT_LISTEN) {
+ 			rfcomm_accept_connection(s);
+ 			continue;

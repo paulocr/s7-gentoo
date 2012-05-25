@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/usb/gadget/u_ether.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/gadget/u_ether.h	2012-05-23 10:43:59.592935419 +0300
+@@ -112,7 +112,7 @@
+ int ecm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN]);
+ int eem_bind_config(struct usb_configuration *c);
+ 
+-#ifdef CONFIG_USB_ETH_RNDIS
++#if defined(CONFIG_USB_ETH_RNDIS) || defined(CONFIG_USB_ANDROID_RNDIS)
+ 
+ int rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN]);
+ 

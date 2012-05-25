@@ -1,0 +1,5 @@
+--- ./vanilla//drivers/char/diag/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/char/diag/Makefile	2012-05-23 10:43:57.470935516 +0300
+@@ -0,0 +1,2 @@
++obj-$(CONFIG_DIAG_CHAR) := diagchar.o
++diagchar-objs := diagchar_core.o diagchar_hdlc.o diagfwd.o diagmem.o

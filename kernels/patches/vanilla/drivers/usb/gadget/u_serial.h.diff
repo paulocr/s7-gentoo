@@ -1,0 +1,21 @@
+--- ./vanilla//drivers/usb/gadget/u_serial.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/gadget/u_serial.h	2012-05-23 10:43:59.592935419 +0300
+@@ -40,11 +40,18 @@
+ 
+ 	/* REVISIT avoid this CDC-ACM support harder ... */
+ 	struct usb_cdc_line_coding port_line_coding;	/* 9600-8-N-1 etc */
++	u16				serial_state;
++
++	/* control signal callbacks*/
++	unsigned int (*get_dtr)(struct gserial *p);
++	unsigned int (*get_rts)(struct gserial *p);
+ 
+ 	/* notification callbacks */
+ 	void (*connect)(struct gserial *p);
+ 	void (*disconnect)(struct gserial *p);
+ 	int (*send_break)(struct gserial *p, int duration);
++	unsigned int (*send_carrier_detect)(struct gserial *p, unsigned int);
++	unsigned int (*send_ring_indicator)(struct gserial *p, unsigned int);
+ };
+ 
+ /* utilities to allocate/free request and buffer */

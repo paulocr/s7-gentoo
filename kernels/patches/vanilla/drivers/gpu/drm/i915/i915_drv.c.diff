@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/gpu/drm/i915/i915_drv.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/drm/i915/i915_drv.c	2012-05-23 10:43:57.657935507 +0300
+@@ -257,7 +257,7 @@
+ static int __devinit
+ i915_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
+-	return drm_get_dev(pdev, ent, &driver);
++	return drm_get_pci_dev(pdev, ent, &driver);
+ }
+ 
+ static void

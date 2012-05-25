@@ -1,0 +1,7 @@
+--- ./vanilla//drivers/switch/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/switch/Makefile	2012-05-23 10:43:59.559935423 +0300
+@@ -0,0 +1,4 @@
++# Switch Class Driver
++obj-$(CONFIG_SWITCH)		+= switch_class.o
++obj-$(CONFIG_SWITCH_GPIO)	+= switch_gpio.o
++

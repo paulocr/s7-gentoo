@@ -1,0 +1,14 @@
+--- ./vanilla//net/rfkill/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/rfkill/Kconfig	2012-05-23 10:44:04.916935184 +0300
+@@ -10,6 +10,11 @@
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rfkill.
+ 
++config RFKILL_PM
++	bool "Power off on suspend"
++	depends on RFKILL && PM
++	default y
++
+ # LED trigger support
+ config RFKILL_LEDS
+ 	bool

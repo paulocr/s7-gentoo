@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/include/asm/cacheflush.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/cacheflush.h	2012-05-23 10:43:53.860935677 +0300
+@@ -381,7 +381,7 @@
+  * Harvard caches are synchronised for the user space address range.
+  * This is used for the ARM private sys_cacheflush system call.
+  */
+-#define flush_cache_user_range(vma,start,end) \
++#define flush_cache_user_range(start,end) \
+ 	__cpuc_coherent_user_range((start) & PAGE_MASK, PAGE_ALIGN(end))
+ 
+ /*

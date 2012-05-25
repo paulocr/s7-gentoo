@@ -1,0 +1,8 @@
+--- ./vanilla//drivers/input/joystick/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/joystick/Makefile	2012-05-23 10:43:57.787935502 +0300
+@@ -31,4 +31,4 @@
+ obj-$(CONFIG_JOYSTICK_XPAD)		+= xpad.o
+ obj-$(CONFIG_JOYSTICK_ZHENHUA)		+= zhenhua.o
+ obj-$(CONFIG_JOYSTICK_WALKERA0701)	+= walkera0701.o
+-
++obj-$(CONFIG_TOUCHDISC_VTD518_SHINETSU) += tdisc_vtd518_shinetsu.o

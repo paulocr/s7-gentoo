@@ -1,0 +1,27 @@
+--- ./vanilla//drivers/power/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/power/Makefile	2012-05-23 10:43:58.737935459 +0300
+@@ -21,11 +21,24 @@
+ 
+ obj-$(CONFIG_BATTERY_DS2760)	+= ds2760_battery.o
+ obj-$(CONFIG_BATTERY_DS2782)	+= ds2782_battery.o
++obj-$(CONFIG_BATTERY_DS2784)	+= ds2784_battery.o
+ obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
+ obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
+ obj-$(CONFIG_BATTERY_TOSA)	+= tosa_battery.o
+ obj-$(CONFIG_BATTERY_WM97XX)	+= wm97xx_battery.o
+ obj-$(CONFIG_BATTERY_BQ27x00)	+= bq27x00_battery.o
++obj-$(CONFIG_BATTERY_BQ275X0)	+= bq275x0_battery.o
+ obj-$(CONFIG_BATTERY_DA9030)	+= da9030_battery.o
+ obj-$(CONFIG_BATTERY_MAX17040)	+= max17040_battery.o
+ obj-$(CONFIG_CHARGER_PCF50633)	+= pcf50633-charger.o
++
++ifeq ($(CONFIG_MACH_QSD8X50_SURF_S7_S7201), y)
++obj-$(CONFIG_BATTERY_MSM)	+= msm_battery-slim.o
++else ifeq ($(CONFIG_MACH_QSD8X50_SURF_S7_S7), y)
++obj-$(CONFIG_BATTERY_MSM)	+= msm_battery-s7.o
++else
++obj-$(CONFIG_BATTERY_MSM)	+= msm_battery.o
++endif
++
++obj-$(CONFIG_LIGHT_SENSOR_PO188) += po188.o
++

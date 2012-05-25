@@ -1,0 +1,10 @@
+--- ./vanilla//drivers/input/cypress_120/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/input/cypress_120/Makefile	2012-05-23 10:43:57.784935502 +0300
+@@ -0,0 +1,7 @@
++#
++# Makefile for the cypress 120 ts drivers.
++#
++
++# Each configuration option enables a list of files.
++obj-$(CONFIG_CYPRESS120)+= cypress120_ts_i2c_drv.o
++

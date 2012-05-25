@@ -1,0 +1,24 @@
+--- ./vanilla//drivers/net/wireless/bcm4329/include/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/net/wireless/bcm4329/include/Makefile	2012-05-23 10:43:58.538935466 +0300
+@@ -0,0 +1,21 @@
++#
++# include/Makefile
++#
++# Copyright 2005, Broadcom, Inc.
++#
++# $Id: Makefile,v 13.5 2005/02/17 19:11:31 Exp $
++#
++
++SRCBASE	= ..
++
++TARGETS	= epivers.h
++
++
++all release:
++	bash epivers.sh
++
++clean:
++	rm -rf ${TARGETS} *.prev
++
++
++.PHONY: all release clean

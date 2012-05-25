@@ -1,0 +1,15 @@
+--- ./vanilla//drivers/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/Makefile	2012-05-23 10:43:57.387935520 +0300
+@@ -94,6 +94,7 @@
+ obj-$(CONFIG_MMC)		+= mmc/
+ obj-$(CONFIG_MEMSTICK)		+= memstick/
+ obj-$(CONFIG_NEW_LEDS)		+= leds/
++obj-$(CONFIG_SWITCH)		+= switch/
+ obj-$(CONFIG_INFINIBAND)	+= infiniband/
+ obj-$(CONFIG_SGI_SN)		+= sn/
+ obj-y				+= firmware/
+@@ -111,3 +112,4 @@
+ obj-$(CONFIG_STAGING)		+= staging/
+ obj-y				+= platform/
+ obj-y				+= ieee802154/
++obj-y				+= bsp_driver/

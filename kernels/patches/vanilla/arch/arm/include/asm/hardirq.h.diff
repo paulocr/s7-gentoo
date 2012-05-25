@@ -1,0 +1,13 @@
+--- ./vanilla//arch/arm/include/asm/hardirq.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/hardirq.h	2012-05-23 10:43:53.862935677 +0300
+@@ -12,7 +12,9 @@
+ 
+ #include <linux/irq_cpustat.h>	/* Standard mappings for irq_cpustat_t above */
+ 
+-#if NR_IRQS > 256
++#if NR_IRQS > 512
++#define HARDIRQ_BITS	10
++#elif NR_IRQS > 256
+ #define HARDIRQ_BITS	9
+ #else
+ #define HARDIRQ_BITS	8

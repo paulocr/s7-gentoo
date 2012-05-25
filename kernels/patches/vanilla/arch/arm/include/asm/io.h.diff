@@ -1,0 +1,20 @@
+--- ./vanilla//arch/arm/include/asm/io.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/io.h	2012-05-23 10:43:53.864935677 +0300
+@@ -222,12 +222,17 @@
+ #ifndef __arch_ioremap
+ #define ioremap(cookie,size)		__arm_ioremap(cookie, size, MT_DEVICE)
+ #define ioremap_nocache(cookie,size)	__arm_ioremap(cookie, size, MT_DEVICE)
++#define ioremap_strongly_ordered(cookie, size)  __arm_ioremap(cookie, size, \
++						MT_DEVICE_STRONGLY_ORDERED)
+ #define ioremap_cached(cookie,size)	__arm_ioremap(cookie, size, MT_DEVICE_CACHED)
+ #define ioremap_wc(cookie,size)		__arm_ioremap(cookie, size, MT_DEVICE_WC)
+ #define iounmap(cookie)			__iounmap(cookie)
+ #else
+ #define ioremap(cookie,size)		__arch_ioremap((cookie), (size), MT_DEVICE)
+ #define ioremap_nocache(cookie,size)	__arch_ioremap((cookie), (size), MT_DEVICE)
++#define ioremap_strongly_ordered(cookie, size)  __arch_ioremap((cookie), \
++						(size), \
++						MT_DEVICE_STRONGLY_ORDERED)
+ #define ioremap_cached(cookie,size)	__arch_ioremap((cookie), (size), MT_DEVICE_CACHED)
+ #define ioremap_wc(cookie,size)		__arch_ioremap((cookie), (size), MT_DEVICE_WC)
+ #define iounmap(cookie)			__arch_iounmap(cookie)

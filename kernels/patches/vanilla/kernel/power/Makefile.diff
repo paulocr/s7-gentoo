@@ -1,0 +1,13 @@
+--- ./vanilla//kernel/power/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/power/Makefile	2012-05-23 10:44:04.730935191 +0300
+@@ -10,5 +10,10 @@
+ obj-$(CONFIG_PM_TEST_SUSPEND)	+= suspend_test.o
+ obj-$(CONFIG_HIBERNATION)	+= swsusp.o hibernate.o snapshot.o swap.o user.o
+ obj-$(CONFIG_HIBERNATION_NVS)	+= hibernate_nvs.o
++obj-$(CONFIG_WAKELOCK)		+= wakelock.o
++obj-$(CONFIG_USER_WAKELOCK)	+= userwakelock.o
++obj-$(CONFIG_EARLYSUSPEND)	+= earlysuspend.o
++obj-$(CONFIG_CONSOLE_EARLYSUSPEND)	+= consoleearlysuspend.o
++obj-$(CONFIG_FB_EARLYSUSPEND)	+= fbearlysuspend.o
+ 
+ obj-$(CONFIG_MAGIC_SYSRQ)	+= poweroff.o

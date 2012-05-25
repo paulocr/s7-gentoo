@@ -1,0 +1,16 @@
+--- ./vanilla//drivers/mtd/mtd_blkdevs.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/mtd/mtd_blkdevs.c	2012-05-23 10:43:58.180935482 +0300
+@@ -387,6 +387,13 @@
+ 		return ret;
+ 	}
+ 
++	/*
++	 * Empirical measurements revealed that read ahead values larger than
++	 * 4 slowed down boot time, so start out with this small value.
++	 */
++	tr->blkcore_priv->rq->backing_dev_info.ra_pages =
++		(4 * 1024) / PAGE_CACHE_SIZE;
++
+ 	INIT_LIST_HEAD(&tr->devs);
+ 	list_add(&tr->list, &blktrans_majors);
+ 

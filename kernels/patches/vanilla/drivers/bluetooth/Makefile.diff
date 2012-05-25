@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/bluetooth/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/bluetooth/Makefile	2012-05-23 10:43:57.457935516 +0300
+@@ -25,4 +25,8 @@
+ hci_uart-$(CONFIG_BT_HCIUART_H4)	+= hci_h4.o
+ hci_uart-$(CONFIG_BT_HCIUART_BCSP)	+= hci_bcsp.o
+ hci_uart-$(CONFIG_BT_HCIUART_LL)	+= hci_ll.o
++hci_uart-$(CONFIG_BT_HCIUART_IBS)	+= hci_ibs.o
+ hci_uart-objs				:= $(hci_uart-y)
++obj-$(CONFIG_BT_MSM_SLEEP)              += msm_bt_sleep.o
++msm_bt_sleep-objs                       := bluesleep.o
++obj-$(CONFIG_MSM_BT_POWER)		+= bluetooth-power.o

@@ -1,0 +1,10 @@
+--- ./vanilla//include/linux/if_arp.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/if_arp.h	2012-05-23 10:44:04.570935198 +0300
+@@ -59,6 +59,7 @@
+ #define ARPHRD_LAPB	516		/* LAPB				*/
+ #define ARPHRD_DDCMP    517		/* Digital's DDCMP protocol     */
+ #define ARPHRD_RAWHDLC	518		/* Raw HDLC			*/
++#define ARPHRD_RAWIP	530	        /* Raw IP                       */
+ 
+ #define ARPHRD_TUNNEL	768		/* IPIP tunnel			*/
+ #define ARPHRD_TUNNEL6	769		/* IP6IP6 tunnel       		*/

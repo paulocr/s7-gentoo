@@ -1,0 +1,16 @@
+--- ./vanilla//drivers/input/joystick/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/input/joystick/Kconfig	2012-05-23 10:43:57.787935502 +0300
+@@ -318,4 +318,13 @@
+ 	  To compile this as a module choose M here: the module will be called
+ 	  maplecontrol.
+ 
++config TOUCHDISC_VTD518_SHINETSU
++	tristate "ShinEtsu VTD518 TouchDisc"
++	depends on I2C
++	default y
++	help
++	  Say Y here if you have the ShinEtsu VTD518 Touchdisc connected.
++
++	  To compile this as a module choose M here: the module will be called
++	  tdisc_vtd518_shinetsu.
+ endif

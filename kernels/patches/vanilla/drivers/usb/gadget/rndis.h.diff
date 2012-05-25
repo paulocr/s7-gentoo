@@ -1,0 +1,19 @@
+--- ./vanilla//drivers/usb/gadget/rndis.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/gadget/rndis.h	2012-05-23 10:43:59.590935421 +0300
+@@ -16,6 +16,7 @@
+ #define _LINUX_RNDIS_H
+ 
+ #include "ndis.h"
++#include "u_ether.h"
+ 
+ #define RNDIS_MAXIMUM_FRAME_SIZE	1518
+ #define RNDIS_MAX_TOTAL_SIZE		1558
+@@ -262,7 +263,7 @@
+ int  rndis_state (int configNr);
+ extern void rndis_set_host_mac (int configNr, const u8 *addr);
+ 
+-int __devinit rndis_init (void);
++int rndis_init(void);
+ void rndis_exit (void);
+ 
+ #endif  /* _LINUX_RNDIS_H */

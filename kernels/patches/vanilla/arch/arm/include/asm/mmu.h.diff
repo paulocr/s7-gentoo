@@ -1,0 +1,10 @@
+--- ./vanilla//arch/arm/include/asm/mmu.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/mmu.h	2012-05-23 10:43:53.866935676 +0300
+@@ -6,6 +6,7 @@
+ typedef struct {
+ #ifdef CONFIG_CPU_HAS_ASID
+ 	unsigned int id;
++	spinlock_t id_lock;
+ #endif
+ 	unsigned int kvm_seq;
+ } mm_context_t;

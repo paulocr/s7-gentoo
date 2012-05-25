@@ -1,0 +1,26 @@
+--- ./vanilla//arch/arm/include/asm/memory.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/include/asm/memory.h	2012-05-23 10:43:53.866935676 +0300
+@@ -194,7 +194,8 @@
+ #ifndef __virt_to_bus
+ #define __virt_to_bus	__virt_to_phys
+ #define __bus_to_virt	__phys_to_virt
+-#define __pfn_to_bus(x)	((x) << PAGE_SHIFT)
++#define __pfn_to_bus(x)	__pfn_to_phys(x)
++#define __bus_to_pfn(x)	__phys_to_pfn(x)
+ #endif
+ 
+ static inline __deprecated unsigned long virt_to_bus(void *x)
+@@ -305,6 +306,13 @@
+ #define arch_is_coherent()		0
+ #endif
+ 
++/*
++ * Set if the architecture speculatively fetches data into cache.
++ */
++#ifndef arch_has_speculative_dfetch
++#define arch_has_speculative_dfetch()	0
++#endif
++
+ #endif
+ 
+ #include <asm-generic/memory_model.h>

@@ -1,0 +1,10 @@
+--- ./vanilla//sound/soc/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//sound/soc/Kconfig	2012-05-23 10:44:06.028935133 +0300
+@@ -31,6 +31,7 @@
+ source "sound/soc/fsl/Kconfig"
+ source "sound/soc/imx/Kconfig"
+ source "sound/soc/omap/Kconfig"
++source "sound/soc/msm/Kconfig"
+ source "sound/soc/pxa/Kconfig"
+ source "sound/soc/s3c24xx/Kconfig"
+ source "sound/soc/s6000/Kconfig"

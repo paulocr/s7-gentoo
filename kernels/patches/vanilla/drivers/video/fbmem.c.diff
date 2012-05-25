@@ -1,0 +1,133 @@
+--- ./vanilla//drivers/video/fbmem.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/video/fbmem.c	2012-05-23 10:44:04.168935215 +0300
+@@ -34,7 +34,7 @@
+ #include <linux/fb.h>
+ 
+ #include <asm/fb.h>
+-
++#include "msm/msm_fb.h"
+ 
+     /*
+      *  Frame buffer device initialization and setup routines
+@@ -909,6 +909,11 @@
+ 	return err;
+ }
+ 
++
++#ifdef CONFIG_MSM_HDMI
++int g_Set_Flag = 2;
++struct mutex mutex_set_flag;
++#endif
+ int
+ fb_set_var(struct fb_info *info, struct fb_var_screeninfo *var)
+ {
+@@ -943,6 +948,8 @@
+ 	    memcmp(&info->var, var, sizeof(struct fb_var_screeninfo))) {
+ 		u32 activate = var->activate;
+ 
++#ifndef CONFIG_MSM_HDMI
++	
+ 		if (!info->fbops->fb_check_var) {
+ 			*var = info->var;
+ 			goto done;
+@@ -952,6 +959,8 @@
+ 
+ 		if (ret)
+ 			goto done;
++	
++#endif
+ 
+ 		if ((var->activate & FB_ACTIVATE_MASK) == FB_ACTIVATE_NOW) {
+ 			struct fb_var_screeninfo old_var;
+@@ -1039,6 +1048,10 @@
+ 	struct fb_event event;
+ 	void __user *argp = (void __user *)arg;
+ 	long ret = 0;
++#ifdef CONFIG_MSM_HDMI
++	struct msm_fb_data_type *mfd;
++	struct msm_fb_panel_data *pdata = NULL;
++#endif
+ 
+ 	switch (cmd) {
+ 	case FBIOGET_VSCREENINFO:
+@@ -1056,13 +1069,53 @@
+ 			return -ENODEV;
+ 		acquire_console_sem();
+ 		info->flags |= FBINFO_MISC_USEREVENT;
++#ifdef CONFIG_MSM_HDMI
++		mfd = (struct msm_fb_data_type *)info->par;
++		
++		
++		if( g_Set_Flag == 0 )
++		{
++			mfd->panel_power_on = g_Set_Flag;
++			
++			printk(KERN_INFO  "---[%s]---nielimin ---mfd->fbi->fix.line_length = %d ----\n", __FUNCTION__, mfd->fbi->fix.line_length);
++			printk(KERN_INFO  "---[%s]---nielimin ---mfd->fbi->fix.smem_len = %d ----\n", __FUNCTION__, mfd->fbi->fix.smem_len);
++		
++			printk(KERN_INFO  "---[%s]---nielimin-----mfd->var_xres = %d mfd->var_yres = %d----\n", __FUNCTION__,mfd->var_xres,mfd->var_yres );
++			printk(KERN_INFO  "---[%s]---nielimin ---var.xres = %d var.yres = %d----\n", __FUNCTION__, var.xres, var.yres);
++			printk(KERN_INFO  "---[%s]---nielimin ---var.xres_virtual = %d var.yres_virtual = %d----\n", __FUNCTION__, var.xres_virtual, var.yres_virtual);
++			pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
++			pdata->off(mfd->pdev);
++		}		
++#endif
+ 		ret = fb_set_var(info, &var);
++
++#ifdef CONFIG_MSM_HDMI
++		if( g_Set_Flag == 0)
++		{						
++			mfd->var_xres = info->var.xres;
++			mfd->var_yres = info->var.yres;
++			mfd->bl_level = 150;
++			pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
++			mfd->dma_fnc(mfd);					
++			pdata->set_backlight(mfd);
++			g_Set_Flag = 1;
++			mutex_unlock(&mutex_set_flag);
++		}
++#endif
+ 		info->flags &= ~FBINFO_MISC_USEREVENT;
+ 		release_console_sem();
+ 		unlock_fb_info(info);
+ 		if (!ret && copy_to_user(argp, &var, sizeof(var)))
+ 			ret = -EFAULT;
+ 		break;
++
++#ifdef CONFIG_MSM_HDMI
++	case FBIOSET_MFD_INFO:
++        g_Set_Flag = 0;
++		mutex_lock(&mutex_set_flag);
++		break;
++#endif
++
+ 	case FBIOGET_FSCREENINFO:
+ 		if (!lock_fb_info(info))
+ 			return -ENODEV;
+@@ -1145,14 +1198,11 @@
+ 		unlock_fb_info(info);
+ 		break;
+ 	default:
+-		if (!lock_fb_info(info))
+-			return -ENODEV;
+ 		fb = info->fbops;
+ 		if (fb->fb_ioctl)
+ 			ret = fb->fb_ioctl(info, cmd, arg);
+ 		else
+ 			ret = -ENOTTY;
+-		unlock_fb_info(info);
+ 	}
+ 	return ret;
+ }
+@@ -1666,6 +1716,11 @@
+ static int __init
+ fbmem_init(void)
+ {
++
++#ifdef CONFIG_MSM_HDMI
++	mutex_init(&mutex_set_flag);
++
++#endif
+ 	proc_create("fb", 0, NULL, &fb_proc_fops);
+ 
+ 	if (register_chrdev(FB_MAJOR,"fb",&fb_fops))

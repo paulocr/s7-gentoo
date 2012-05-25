@@ -1,0 +1,14 @@
+--- ./vanilla//drivers/video/console/bitblit.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/video/console/bitblit.c	2012-05-23 10:44:04.161935217 +0300
+@@ -382,8 +382,9 @@
+ 	if (info->fbops->fb_cursor)
+ 		err = info->fbops->fb_cursor(info, &cursor);
+ 
+-	if (err)
+-		soft_cursor(info, &cursor);
++	//if (err)
++	   if(0) 
++    	soft_cursor(info, &cursor);
+ 
+ 	ops->cursor_reset = 0;
+ }

@@ -1,0 +1,9 @@
+--- ./vanilla//fs/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/Makefile	2012-05-23 10:44:04.288935212 +0300
+@@ -124,3 +124,6 @@
+ obj-$(CONFIG_BTRFS_FS)		+= btrfs/
+ obj-$(CONFIG_GFS2_FS)           += gfs2/
+ obj-$(CONFIG_EXOFS_FS)          += exofs/
++
++# Patched by YAFFS
++obj-$(CONFIG_YAFFS_FS)		+= yaffs2/

@@ -1,0 +1,11 @@
+--- ./vanilla//drivers/power/power_supply_sysfs.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/power/power_supply_sysfs.c	2012-05-23 10:43:58.741935457 +0300
+@@ -122,6 +122,8 @@
+ 	POWER_SUPPLY_ATTR(capacity),
+ 	POWER_SUPPLY_ATTR(capacity_level),
+ 	POWER_SUPPLY_ATTR(temp),
++    POWER_SUPPLY_ATTR(power_off_charging), 
++    POWER_SUPPLY_ATTR(voltage_delta),  
+ 	POWER_SUPPLY_ATTR(temp_ambient),
+ 	POWER_SUPPLY_ATTR(time_to_empty_now),
+ 	POWER_SUPPLY_ATTR(time_to_empty_avg),

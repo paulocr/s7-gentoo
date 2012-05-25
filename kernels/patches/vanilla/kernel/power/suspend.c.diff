@@ -1,0 +1,12 @@
+--- ./vanilla//kernel/power/suspend.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/power/suspend.c	2012-05-23 10:44:04.732935192 +0300
+@@ -19,6 +19,9 @@
+ #include "power.h"
+ 
+ const char *const pm_states[PM_SUSPEND_MAX] = {
++#ifdef CONFIG_EARLYSUSPEND
++	[PM_SUSPEND_ON]		= "on",
++#endif
+ 	[PM_SUSPEND_STANDBY]	= "standby",
+ 	[PM_SUSPEND_MEM]	= "mem",
+ };

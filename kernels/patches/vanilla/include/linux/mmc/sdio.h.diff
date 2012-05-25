@@ -1,0 +1,10 @@
+--- ./vanilla//include/linux/mmc/sdio.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//include/linux/mmc/sdio.h	2012-05-23 10:44:04.593935197 +0300
+@@ -94,6 +94,7 @@
+ 
+ #define  SDIO_BUS_WIDTH_1BIT	0x00
+ #define  SDIO_BUS_WIDTH_4BIT	0x02
++#define  SDIO_BUS_WIDTH_8BIT	0x03
+ 
+ #define  SDIO_BUS_CD_DISABLE     0x80	/* disable pull-up on DAT3 (pin 1) */
+ 

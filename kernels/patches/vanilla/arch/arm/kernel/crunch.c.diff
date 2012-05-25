@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/kernel/crunch.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/kernel/crunch.c	2012-05-23 10:43:53.872935674 +0300
+@@ -51,7 +51,7 @@
+ 		 * initialised state information on the first fault.
+ 		 */
+ 
+-	case THREAD_NOTIFY_RELEASE:
++	case THREAD_NOTIFY_EXIT:
+ 		crunch_task_release(thread);
+ 		break;
+ 

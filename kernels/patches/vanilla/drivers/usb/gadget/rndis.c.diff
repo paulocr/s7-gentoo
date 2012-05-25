@@ -1,0 +1,33 @@
+--- ./vanilla//drivers/usb/gadget/rndis.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/gadget/rndis.c	2012-05-23 10:43:59.590935421 +0300
+@@ -291,9 +291,18 @@
+ 	/* mandatory */
+ 	case OID_GEN_VENDOR_DESCRIPTION:
+ 		pr_debug("%s: OID_GEN_VENDOR_DESCRIPTION\n", __func__);
+-		length = strlen (rndis_per_dev_params [configNr].vendorDescr);
+-		memcpy (outbuf,
+-			rndis_per_dev_params [configNr].vendorDescr, length);
++
++		if(rndis_per_dev_params [configNr].vendorDescr)
++		{
++			length = strlen (rndis_per_dev_params [configNr].vendorDescr);	
++			memcpy (outbuf,
++					rndis_per_dev_params [configNr].vendorDescr, length);
++		}
++		else
++		{
++			outbuf[0] = 0;
++		}
++
+ 		retval = 0;
+ 		break;
+ 
+@@ -1146,7 +1155,7 @@
+ #endif	/* CONFIG_USB_GADGET_DEBUG_FILES */
+ 
+ 
+-int __init rndis_init (void)
++int rndis_init(void)
+ {
+ 	u8 i;
+ 

@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/mach-msm/include/mach/vreg.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-msm/include/mach/vreg.h	2012-05-23 10:43:53.963935670 +0300
+@@ -23,7 +23,7 @@
+ void vreg_put(struct vreg *vreg);
+ 
+ int vreg_enable(struct vreg *vreg);
+-void vreg_disable(struct vreg *vreg);
++int vreg_disable(struct vreg *vreg);
+ int vreg_set_level(struct vreg *vreg, unsigned mv);
+ 
+ #endif

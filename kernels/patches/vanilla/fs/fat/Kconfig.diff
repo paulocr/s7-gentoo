@@ -1,0 +1,29 @@
+--- ./vanilla//fs/fat/Kconfig	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/fat/Kconfig	2012-05-23 10:44:04.348935207 +0300
+@@ -83,6 +83,26 @@
+ 	  It can be overridden with the "codepage" mount option.
+ 	  See <file:Documentation/filesystems/vfat.txt> for more information.
+ 
++config VFAT_FS_DUALNAMES
++	bool "VFAT dual names support"
++	depends on VFAT_FS
++	help
++	  This option provides support for dual filenames on VFAT filesystems.
++  	  If this option is disabled then file creation will either put
++  	  a short (8.3) name or a long name on the file, but never both.
++  	  The field where a shortname would normally go is filled with
++  	  invalid characters such that it cannot be considered a valid
++  	  short filename.
++  	  
++  	  That means that long filenames created with this option
++  	  disabled will not be accessible at all to operating systems
++	  that do not understand the VFAT extensions.
++			  	  	  	  	  	  	  	  
++  	  Users considering enabling this option should consider the implications
++  	  of any patents that may exist on dual filenames in VFAT.
++  	  
++  	  If unsure, say N
++
+ config FAT_DEFAULT_IOCHARSET
+ 	string "Default iocharset for FAT"
+ 	depends on VFAT_FS

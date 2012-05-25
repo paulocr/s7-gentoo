@@ -1,0 +1,12 @@
+--- ./vanilla//drivers/gpu/drm/drm_edid.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/gpu/drm/drm_edid.c	2012-05-23 10:43:57.652935508 +0300
+@@ -1096,6 +1096,9 @@
+ 	int ret;
+ 	struct edid *edid;
+ 
++	if (drm_core_check_feature(connector->dev, DRIVER_USE_PLATFORM_DEVICE))
++		return NULL;
++
+ 	edid = kmalloc(EDID_LENGTH * (MAX_EDID_EXT_NUM + 1),
+ 		       GFP_KERNEL);
+ 	if (edid == NULL) {

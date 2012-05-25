@@ -1,0 +1,16 @@
+--- ./vanilla//arch/arm/mach-ks8695/include/mach/memory.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/mach-ks8695/include/mach/memory.h	2012-05-23 10:43:53.929935674 +0300
+@@ -41,6 +41,13 @@
+ 		__dma = __dma - PHYS_OFFSET + KS8695_PCIMEM_PA; \
+ 	   __dma; })
+ 
++#define __arch_dma_to_page(dev, x)	\
++	({ dma_addr_t __dma = x;				\
++	   if (!is_lbus_device(dev))				\
++		__dma += PHYS_OFFSET - KS8695_PCIMEM_PA;	\
++	   phys_to_page(__dma);					\
++	})
++
+ #endif
+ 
+ #endif

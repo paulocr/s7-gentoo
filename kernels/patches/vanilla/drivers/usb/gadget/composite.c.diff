@@ -1,0 +1,168 @@
+--- ./vanilla//drivers/usb/gadget/composite.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/gadget/composite.c	2012-05-23 10:43:59.578935422 +0300
+@@ -85,7 +85,7 @@
+  * This function returns the value of the function's bind(), which is
+  * zero for success else a negative errno value.
+  */
+-int __init usb_add_function(struct usb_configuration *config,
++int  usb_add_function(struct usb_configuration *config,
+ 		struct usb_function *function)
+ {
+ 	int	value = -EINVAL;
+@@ -215,7 +215,7 @@
+  * Returns the interface ID which was allocated; or -ENODEV if no
+  * more interface IDs can be allocated.
+  */
+-int __init usb_interface_id(struct usb_configuration *config,
++int  usb_interface_id(struct usb_configuration *config,
+ 		struct usb_function *function)
+ {
+ 	unsigned id = config->next_interface_id;
+@@ -453,7 +453,7 @@
+  * assigns global resources including string IDs, and per-configuration
+  * resources such as interface IDs and endpoints.
+  */
+-int __init usb_add_config(struct usb_composite_dev *cdev,
++int  usb_add_config(struct usb_composite_dev *cdev,
+ 		struct usb_configuration *config)
+ {
+ 	int				status = -EINVAL;
+@@ -650,7 +650,7 @@
+  * ensure that for example different functions don't wrongly assign
+  * different meanings to the same identifier.
+  */
+-int __init usb_string_id(struct usb_composite_dev *cdev)
++int  usb_string_id(struct usb_composite_dev *cdev)
+ {
+ 	if (cdev->next_string_id < 254) {
+ 		/* string id 0 is reserved */
+@@ -680,7 +680,19 @@
+ static int
+ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ {
++	if ( (NULL==gadget) ||(NULL == ctrl) )
++	{	
++		printk(KERN_ERR "%s, gadget or ctrl is NULL pointer", __FUNCTION__);
++		return -EOPNOTSUPP;
++	}
++	
+ 	struct usb_composite_dev	*cdev = get_gadget_data(gadget);
++	if ( NULL == cdev )
++	{
++		printk(KERN_ERR "%s, cdev is NULL pointer", __FUNCTION__);
++		return -EOPNOTSUPP;
++	}
++	
+ 	struct usb_request		*req = cdev->req;
+ 	int				value = -EOPNOTSUPP;
+ 	u16				w_index = le16_to_cpu(ctrl->wIndex);
+@@ -688,6 +700,18 @@
+ 	u16				w_value = le16_to_cpu(ctrl->wValue);
+ 	u16				w_length = le16_to_cpu(ctrl->wLength);
+ 	struct usb_function		*f = NULL;
++	
++	if ( NULL == req )
++	{
++		printk(KERN_ERR "%s, req is NULL pointer", __FUNCTION__);
++		return -EOPNOTSUPP;
++	}
++	
++	if ( NULL == gadget->ep0 ) 
++	{
++		printk(KERN_ERR "%s, gadget->ep0 is NULL pointer", __FUNCTION__);
++		return -EOPNOTSUPP;
++	}
+ 
+ 	/* partial re-init of the response message; the function or the
+ 	 * gadget might need to intercept e.g. a control-OUT completion
+@@ -810,6 +834,19 @@
+ 		 */
+ 		if ((ctrl->bRequestType & USB_RECIP_MASK)
+ 				== USB_RECIP_INTERFACE) {
++			struct usb_configuration	*config;
++            if (NULL == cdev) {
++            	printk(KERN_ERR "%s, cdev is NULL pointer, will goto done  ", __FUNCTION__);
++                goto done;
++            }
++            if (NULL == cdev->config) {
++            	printk(KERN_ERR "%s, cdev->config is NULL pointer, will goto done  ", __FUNCTION__);
++                goto done;
++            }
++			
++			config = cdev->config;
++			if (w_index >= config->next_interface_id)
++				goto done;
+ 			f = cdev->config->interface[intf];
+ 			if (f && f->setup)
+ 				value = f->setup(f, ctrl);
+@@ -864,6 +901,7 @@
+ composite_unbind(struct usb_gadget *gadget)
+ {
+ 	struct usb_composite_dev	*cdev = get_gadget_data(gadget);
++	unsigned i;
+ 
+ 	/* composite_disconnect() must already have been called
+ 	 * by the underlying peripheral controller driver!
+@@ -890,6 +928,8 @@
+ 				/* may free memory for "f" */
+ 			}
+ 		}
++		for (i = 0; i < MAX_CONFIG_INTERFACES; i++)
++			c->interface[i] = NULL;
+ 		list_del(&c->list);
+ 		if (c->unbind) {
+ 			DBG(cdev, "unbind config '%s'/%p\n", c->label, c);
+@@ -909,7 +949,7 @@
+ 	composite = NULL;
+ }
+ 
+-static void __init
++static void
+ string_override_one(struct usb_gadget_strings *tab, u8 id, const char *s)
+ {
+ 	struct usb_string		*str = tab->strings;
+@@ -922,7 +962,7 @@
+ 	}
+ }
+ 
+-static void __init
++static void
+ string_override(struct usb_gadget_strings **tab, u8 id, const char *s)
+ {
+ 	while (*tab) {
+@@ -931,7 +971,7 @@
+ 	}
+ }
+ 
+-static int __init composite_bind(struct usb_gadget *gadget)
++static int  composite_bind(struct usb_gadget *gadget)
+ {
+ 	struct usb_composite_dev	*cdev;
+ 	int				status = -ENOMEM;
+@@ -1054,7 +1094,7 @@
+ 	.speed		= USB_SPEED_HIGH,
+ 
+ 	.bind		= composite_bind,
+-	.unbind		= __exit_p(composite_unbind),
++	.unbind		= composite_unbind,
+ 
+ 	.setup		= composite_setup,
+ 	.disconnect	= composite_disconnect,
+@@ -1082,7 +1122,7 @@
+  * while it was binding.  That would usually be done in order to wait for
+  * some userspace participation.
+  */
+-int __init usb_composite_register(struct usb_composite_driver *driver)
++int usb_composite_register(struct usb_composite_driver *driver)
+ {
+ 	if (!driver || !driver->dev || !driver->bind || composite)
+ 		return -EINVAL;
+@@ -1103,7 +1143,7 @@
+  * This function is used to unregister drivers using the composite
+  * driver framework.
+  */
+-void __exit usb_composite_unregister(struct usb_composite_driver *driver)
++void usb_composite_unregister(struct usb_composite_driver *driver)
+ {
+ 	if (composite != driver)
+ 		return;

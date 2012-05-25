@@ -1,0 +1,12 @@
+--- ./vanilla//arch/arm/mach-msm/include/mach/akm8972_board.h	1970-01-01 03:00:00.000000000 +0300
++++ ./default//arch/arm/mach-msm/include/mach/akm8972_board.h	2012-05-23 10:43:53.951935673 +0300
+@@ -0,0 +1,9 @@
++/****************************************************
++ * The platform data of compass driver
++ *
++ * 
++ ****************************************************/
++struct compass_platform_data {
++  int irq;
++  int reset;
++};

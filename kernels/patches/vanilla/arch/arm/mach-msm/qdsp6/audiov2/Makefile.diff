@@ -1,0 +1,15 @@
+--- ./vanilla//arch/arm/mach-msm/qdsp6/audiov2/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//arch/arm/mach-msm/qdsp6/audiov2/Makefile	2012-05-23 10:43:53.981935671 +0300
+@@ -0,0 +1,12 @@
++obj-y += q6audio.o
++obj-y += aac_in.o
++obj-y += voice.o
++obj-y += pcm_out.o
++obj-y += pcm_in.o
++obj-y += mp3.o
++obj-y += audio_ctl.o
++obj-y += analog_audio.o
++obj-y += routing.o
++obj-y += evrc_in.o
++obj-y += qcelp_in.o
++obj-y += amrnb_in.o

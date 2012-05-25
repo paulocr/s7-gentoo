@@ -1,0 +1,49 @@
+--- ./vanilla//net/bluetooth/hci_core.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/bluetooth/hci_core.c	2012-05-23 10:44:04.809935189 +0300
+@@ -77,11 +77,13 @@
+ {
+ 	return atomic_notifier_chain_register(&hci_notifier, nb);
+ }
++EXPORT_SYMBOL(hci_register_notifier);
+ 
+ int hci_unregister_notifier(struct notifier_block *nb)
+ {
+ 	return atomic_notifier_chain_unregister(&hci_notifier, nb);
+ }
++EXPORT_SYMBOL(hci_unregister_notifier);
+ 
+ static void hci_notify(struct hci_dev *hdev, int event)
+ {
+@@ -1164,6 +1166,7 @@
+ 	/* Get rid of skb owner, prior to sending to the driver. */
+ 	skb_orphan(skb);
+ 
++	hci_notify(hdev, HCI_DEV_WRITE);
+ 	return hdev->send(skb);
+ }
+ 
+@@ -1239,7 +1242,7 @@
+ 
+ 	skb->dev = (void *) hdev;
+ 	bt_cb(skb)->pkt_type = HCI_ACLDATA_PKT;
+-	hci_add_acl_hdr(skb, conn->handle, flags | ACL_START);
++	hci_add_acl_hdr(skb, conn->handle, flags);
+ 
+ 	if (!(list = skb_shinfo(skb)->frag_list)) {
+ 		/* Non fragmented */
+@@ -1256,12 +1259,14 @@
+ 		spin_lock_bh(&conn->data_q.lock);
+ 
+ 		__skb_queue_tail(&conn->data_q, skb);
++		flags &= ~ACL_PB_MASK;
++		flags |= ACL_CONT;
+ 		do {
+ 			skb = list; list = list->next;
+ 
+ 			skb->dev = (void *) hdev;
+ 			bt_cb(skb)->pkt_type = HCI_ACLDATA_PKT;
+-			hci_add_acl_hdr(skb, conn->handle, flags | ACL_CONT);
++			hci_add_acl_hdr(skb, conn->handle, flags);
+ 
+ 			BT_DBG("%s frag %p len %d", hdev->name, skb, skb->len);
+ 

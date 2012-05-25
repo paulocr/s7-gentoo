@@ -1,0 +1,4 @@
+--- ./vanilla//drivers/bsp_driver/gpio_debug/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/bsp_driver/gpio_debug/Makefile	2012-05-23 10:43:57.461935514 +0300
+@@ -0,0 +1 @@
++obj-$(CONFIG_BSP_GPIO_DEBUG) += bsp_gpiodebug.o

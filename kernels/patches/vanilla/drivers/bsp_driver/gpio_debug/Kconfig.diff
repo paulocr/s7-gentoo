@@ -1,0 +1,7 @@
+--- ./vanilla//drivers/bsp_driver/gpio_debug/Kconfig	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/bsp_driver/gpio_debug/Kconfig	2012-05-23 10:43:57.461935514 +0300
+@@ -0,0 +1,4 @@
++config BSP_GPIO_DEBUG
++	tristate "GPIO Debug driver"
++	help
++	  GPIO Debug driver.

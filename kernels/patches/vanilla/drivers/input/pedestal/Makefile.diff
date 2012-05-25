@@ -1,0 +1,12 @@
+--- ./vanilla//drivers/input/pedestal/Makefile	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/input/pedestal/Makefile	2012-05-23 10:43:57.806935501 +0300
+@@ -0,0 +1,9 @@
++#
++# Makefile for the pedestal drivers.
++#
++
++# Each configuration option enables a list of files.
++obj-$(CONFIG_PEDESTAL)	+= pedestal.o
++obj-$(CONFIG_PEDESTAL)	+= rmt_ctrl.o
++obj-$(CONFIG_PEDESTAL)	+= sound_box.o
++

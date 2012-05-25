@@ -1,0 +1,13 @@
+--- ./vanilla//lib/Kconfig.debug	2010-02-23 17:38:51.000000000 +0200
++++ ./default//lib/Kconfig.debug	2012-05-23 10:44:04.755935191 +0300
+@@ -545,8 +545,9 @@
+ 	  mutexes and rwsems.
+ 
+ config STACKTRACE
+-	bool
++	bool "Stacktrace"
+ 	depends on STACKTRACE_SUPPORT
++	default y
+ 
+ config DEBUG_KOBJECT
+ 	bool "kobject debugging"

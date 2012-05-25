@@ -1,0 +1,17 @@
+--- ./vanilla//kernel/cgroup_freezer.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//kernel/cgroup_freezer.c	2012-05-23 10:44:04.720935193 +0300
+@@ -163,6 +163,14 @@
+ {
+ 	struct freezer *freezer;
+ 
++	if ((current != task) && (!capable(CAP_SYS_ADMIN))) {
++		const struct cred *cred = current_cred(), *tcred;
++
++		tcred = __task_cred(task);
++		if (cred->euid != tcred->uid && cred->euid != tcred->suid)
++			return -EPERM;
++	}
++
+ 	/*
+ 	 * Anything frozen can't move or be moved to/from.
+ 	 *

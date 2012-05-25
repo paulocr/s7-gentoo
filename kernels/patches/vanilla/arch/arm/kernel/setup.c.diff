@@ -1,0 +1,71 @@
+--- ./vanilla//arch/arm/kernel/setup.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/kernel/setup.c	2012-05-23 10:43:53.875935676 +0300
+@@ -24,6 +24,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/smp.h>
+ #include <linux/fs.h>
++#include <linux/io.h>
+ 
+ #include <asm/unified.h>
+ #include <asm/cpu.h>
+@@ -198,6 +199,10 @@
+ 	"?(17)",
+ };
+ 
++#define HW_REVISION_NUMBER   0xA8E00270
++#define CT_CSR_PHYS		0xA8700000
++#define TCSR_SPARE2_ADDR	(ct_csr_base + 0x60)
++
+ int cpu_architecture(void)
+ {
+ 	int cpu_arch;
+@@ -808,6 +813,13 @@
+ {
+ 	int i;
+ 
++	void __iomem *ct_csr_base;
++	unsigned int tcsr_spare2=0;
++	unsigned int value = readl(ioremap(HW_REVISION_NUMBER,4));	
++	unsigned int acpuclk_khz = 0;
++	const char*  acpu_type=NULL;
++
++	
+ 	seq_printf(m, "Processor\t: %s rev %d (%s)\n",
+ 		   cpu_name, read_cpuid_id() & 15, elf_platform);
+ 
+@@ -864,6 +876,35 @@
+ 	seq_printf(m, "Serial\t\t: %08x%08x\n",
+ 		   system_serial_high, system_serial_low);
+ 
++
++	/*if the type of CPU is 8650*/
++	if (0x202800E1 == value) {
++		acpuclk_khz = 768000;
++		acpu_type = "QSD8650";
++	}
++	/*if the type of CPU is 8250*/
++	else if (0x202400E1 == value ) {
++		ct_csr_base = ioremap(CT_CSR_PHYS, PAGE_SIZE);
++		BUG_ON(ct_csr_base == NULL);
++	    	tcsr_spare2 = readl(TCSR_SPARE2_ADDR);	    	
++	    	value = tcsr_spare2 & 0xF0;
++	    	/*if the frequency can be set 998MHZ*/
++	    	if( 0x30 == value ) {
++			acpuclk_khz = 998000;
++			acpu_type = "QSD8250";
++		}
++	    	/*if the frequency can be set 768MHZ*/
++	    	else if( 0x70 == value ) {
++			acpuclk_khz = 768000;
++			acpu_type = "QSD8250";
++		}	
++	}
++	seq_puts(m, "\n");
++
++	seq_printf(m, "ACPU type\t: %s\n",acpu_type);
++	seq_printf(m, "ACPU clock\t: %03d MHz\n",(acpuclk_khz/1000));
++
++
+ 	return 0;
+ }
+ 

@@ -1,0 +1,11 @@
+--- ./vanilla//fs/fs-writeback.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/fs-writeback.c	2012-05-23 10:44:04.352935209 +0300
+@@ -1071,7 +1071,7 @@
+ 	if ((inode->i_state & flags) == flags)
+ 		return;
+ 
+-	if (unlikely(block_dump))
++	if (unlikely(block_dump > 1))
+ 		block_dump___mark_inode_dirty(inode);
+ 
+ 	spin_lock(&inode_lock);

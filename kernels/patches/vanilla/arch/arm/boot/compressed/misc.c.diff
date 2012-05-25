@@ -1,0 +1,11 @@
+--- ./vanilla//arch/arm/boot/compressed/misc.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//arch/arm/boot/compressed/misc.c	2012-05-23 10:43:53.829935676 +0300
+@@ -33,7 +33,7 @@
+ 
+ #ifdef CONFIG_DEBUG_ICEDCC
+ 
+-#ifdef CONFIG_CPU_V6
++#if defined(CONFIG_CPU_V6) || defined(CONFIG_CPU_V7)
+ 
+ static void icedcc_putc(int ch)
+ {

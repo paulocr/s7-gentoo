@@ -1,0 +1,10 @@
+--- ./vanilla//drivers/usb/otg/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/usb/otg/Makefile	2012-05-23 10:44:04.117935219 +0300
+@@ -10,6 +10,7 @@
+ obj-$(CONFIG_ISP1301_OMAP)	+= isp1301_omap.o
+ obj-$(CONFIG_TWL4030_USB)	+= twl4030-usb.o
+ obj-$(CONFIG_NOP_USB_XCEIV)	+= nop-usb-xceiv.o
++obj-$(CONFIG_USB_MSM_OTG_72K)	+= msm72k_otg.o
+ 
+ ccflags-$(CONFIG_USB_DEBUG)	+= -DDEBUG
+ ccflags-$(CONFIG_USB_GADGET_DEBUG) += -DDEBUG

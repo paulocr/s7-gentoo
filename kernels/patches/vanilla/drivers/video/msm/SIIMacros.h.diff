@@ -1,0 +1,12 @@
+--- ./vanilla//drivers/video/msm/SIIMacros.h	1970-01-01 03:00:00.000000000 +0300
++++ ./default//drivers/video/msm/SIIMacros.h	2012-05-23 10:44:04.185935216 +0300
+@@ -0,0 +1,9 @@
++/***********************************************************************************/
++/*  Copyright (c) 2002-2009, Silicon Image, Inc.  All rights reserved.             */
++/*  No part of this work may be reproduced, modified, distributed, transmitted,    */
++/*  transcribed, or translated into any language or computer format, in any form   */
++/*  or by any means without written permission of: Silicon Image, Inc.,            */
++/*  1060 East Arques Avenue, Sunnyvale, California 94085                           */
++/***********************************************************************************/
++
++#define ClearInterrupt(x)                   WriteByteTPI(TPI_INTERRUPT_STATUS_REG, x)                   // write "1" to clear interrupt bit

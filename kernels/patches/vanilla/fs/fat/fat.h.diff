@@ -1,0 +1,10 @@
+--- ./vanilla//fs/fat/fat.h	2010-02-23 17:38:51.000000000 +0200
++++ ./default//fs/fat/fat.h	2012-05-23 10:44:04.348935207 +0300
+@@ -76,6 +76,7 @@
+ 	const void *dir_ops;		     /* Opaque; default directory operations */
+ 	int dir_per_block;	     /* dir entries per block */
+ 	int dir_per_block_bits;	     /* log2(dir_per_block) */
++	unsigned long vol_id;        /* volume ID */
+ 
+ 	int fatent_shift;
+ 	struct fatent_operations *fatent_ops;

@@ -1,0 +1,159 @@
+--- ./vanilla//drivers/mmc/card/block.c	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/mmc/card/block.c	2012-05-23 10:43:58.154935485 +0300
+@@ -44,9 +44,9 @@
+ MODULE_ALIAS("mmc:block");
+ 
+ /*
+- * max 8 partitions per card
++ * max 16 partitions per card
+  */
+-#define MMC_SHIFT	3
++#define MMC_SHIFT	4
+ #define MMC_NUM_MINORS	(256 >> MMC_SHIFT)
+ 
+ static DECLARE_BITMAP(dev_use, MMC_NUM_MINORS);
+@@ -241,6 +241,33 @@
+ 	return cmd.resp[0];
+ }
+ 
++static int
++mmc_blk_set_blksize(struct mmc_blk_data *md, struct mmc_card *card)
++{
++	struct mmc_command cmd;
++	int err;
++
++	/* Block-addressed cards ignore MMC_SET_BLOCKLEN. */
++	if (mmc_card_blockaddr(card))
++		return 0;
++
++	mmc_claim_host(card->host);
++	cmd.opcode = MMC_SET_BLOCKLEN;
++	cmd.arg = 512;
++	cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_AC;
++	err = mmc_wait_for_cmd(card->host, &cmd, 5);
++	mmc_release_host(card->host);
++
++	if (err) {
++		printk(KERN_ERR "%s: unable to set block size to %d: %d\n",
++			md->disk->disk_name, cmd.arg, err);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++
+ static int mmc_blk_issue_rq(struct mmc_queue *mq, struct request *req)
+ {
+ 	struct mmc_blk_data *md = mq->data;
+@@ -248,6 +275,13 @@
+ 	struct mmc_blk_request brq;
+ 	int ret = 1, disable_multi = 0;
+ 
++#ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
++	if (mmc_bus_needs_resume(card->host)) {
++		mmc_resume_bus(card->host);
++		mmc_blk_set_blksize(md, card);
++	}
++#endif
++
+ 	mmc_claim_host(card->host);
+ 
+ 	do {
+@@ -351,6 +385,8 @@
+ 				continue;
+ 			}
+ 			status = get_card_status(card, req);
++		} else if (disable_multi == 1) {
++			disable_multi = 0;
+ 		}
+ 
+ 		if (brq.cmd.error) {
+@@ -481,10 +517,24 @@
+ 	struct mmc_blk_data *md;
+ 	int devidx, ret;
+ 
++	printk(KERN_ERR "type = %d hostidx = %d\n", card->type, card->host->index);
++
+ 	devidx = find_first_zero_bit(dev_use, MMC_NUM_MINORS);
+ 	if (devidx >= MMC_NUM_MINORS)
+ 		return ERR_PTR(-ENOSPC);
+ 	__set_bit(devidx, dev_use);
++	if ((devidx == 0 && (card->host->index != 3))) {
++		if (card->type != MMC_TYPE_MMC) {
++			devidx = find_first_zero_bit(dev_use, MMC_NUM_MINORS);
++			if (devidx >= MMC_NUM_MINORS)
++				return ERR_PTR(-ENOSPC);
++			__set_bit(devidx, dev_use);
++		}
++			
++	}
++	
++	if (card->host->index == 3)
++		devidx = 0;
+ 
+ 	md = kzalloc(sizeof(struct mmc_blk_data), GFP_KERNEL);
+ 	if (!md) {
+@@ -562,32 +612,6 @@
+ 	return ERR_PTR(ret);
+ }
+ 
+-static int
+-mmc_blk_set_blksize(struct mmc_blk_data *md, struct mmc_card *card)
+-{
+-	struct mmc_command cmd;
+-	int err;
+-
+-	/* Block-addressed cards ignore MMC_SET_BLOCKLEN. */
+-	if (mmc_card_blockaddr(card))
+-		return 0;
+-
+-	mmc_claim_host(card->host);
+-	cmd.opcode = MMC_SET_BLOCKLEN;
+-	cmd.arg = 512;
+-	cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_AC;
+-	err = mmc_wait_for_cmd(card->host, &cmd, 5);
+-	mmc_release_host(card->host);
+-
+-	if (err) {
+-		printk(KERN_ERR "%s: unable to set block size to %d: %d\n",
+-			md->disk->disk_name, cmd.arg, err);
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+ static int mmc_blk_probe(struct mmc_card *card)
+ {
+ 	struct mmc_blk_data *md;
+@@ -616,6 +640,9 @@
+ 		cap_str, md->read_only ? "(ro)" : "");
+ 
+ 	mmc_set_drvdata(card, md);
++#ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
++	mmc_set_bus_resume_policy(card->host, 1);
++#endif
+ 	add_disk(md->disk);
+ 	return 0;
+ 
+@@ -640,6 +667,9 @@
+ 		mmc_blk_put(md);
+ 	}
+ 	mmc_set_drvdata(card, NULL);
++#ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
++	mmc_set_bus_resume_policy(card->host, 0);
++#endif
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -658,7 +688,9 @@
+ 	struct mmc_blk_data *md = mmc_get_drvdata(card);
+ 
+ 	if (md) {
++#ifndef CONFIG_MMC_BLOCK_DEFERRED_RESUME
+ 		mmc_blk_set_blksize(md, card);
++#endif
+ 		mmc_queue_resume(&md->queue);
+ 	}
+ 	return 0;

@@ -1,0 +1,10 @@
+--- ./vanilla//net/ipv4/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//net/ipv4/Makefile	2012-05-23 10:44:04.838935187 +0300
+@@ -14,6 +14,7 @@
+ 	     inet_fragment.o
+ 
+ obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
++obj-$(CONFIG_SYSFS) += sysfs_net_ipv4.o
+ obj-$(CONFIG_IP_FIB_HASH) += fib_hash.o
+ obj-$(CONFIG_IP_FIB_TRIE) += fib_trie.o
+ obj-$(CONFIG_PROC_FS) += proc.o

@@ -1,0 +1,13 @@
+--- ./vanilla//drivers/i2c/busses/Makefile	2010-02-23 17:38:51.000000000 +0200
++++ ./default//drivers/i2c/busses/Makefile	2012-05-23 10:43:57.715935505 +0300
+@@ -41,6 +41,10 @@
+ obj-$(CONFIG_I2C_IOP3XX)	+= i2c-iop3xx.o
+ obj-$(CONFIG_I2C_IXP2000)	+= i2c-ixp2000.o
+ obj-$(CONFIG_I2C_MPC)		+= i2c-mpc.o
++obj-$(CONFIG_I2C_MSM)		+= i2c-msm.o
++obj-$(CONFIG_GPIO_I2C_ADPT)		+= gpio-i2c-adpt.o
++obj-$(CONFIG_I2C_QUP)           += i2c-qup.o
++obj-$(CONFIG_I2C_SSBI)          += i2c-ssbi.o
+ obj-$(CONFIG_I2C_MV64XXX)	+= i2c-mv64xxx.o
+ obj-$(CONFIG_I2C_OCORES)	+= i2c-ocores.o
+ obj-$(CONFIG_I2C_OMAP)		+= i2c-omap.o
